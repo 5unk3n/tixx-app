@@ -13,45 +13,39 @@ TIXX는 클럽 파티 게스트 초대의 불편함에서 시작된 프로젝트
 
 ![screenshot](https://github.com/user-attachments/assets/9963a563-f5a7-493e-afe0-74baf89a8f32)
 
-### 로드맵
-
-```mermaid
-gantt
-    title TIXX 로드맵
-    dateFormat YYYY-MM-DD
-
-    section 팀 개편 전
-    MVP 앱 기획 및 디자인: 2024-08-07, 2024-11-18
-    MVP 앱 개발: 2024-09-06, 2024-12-12
-
-    section 팀 개편 후
-    팀 개편: 2024-11-28, 2024-12-12
-    MVP 클라이언트용 웹 기획/디자인: 2024-12-12, 2025-01-12
-    MVP 클라이언트용 웹 개발: 2025-01-13, 2025-02-02
-    버전 2 개발 및 출시: 2025-02-03, 2025-03-31
-```
-
-- **팀 개편 전** (기획 1, 디자이너 1, **프론트엔드 개발 1**, 백엔드 개발 1)
-  - 11월 18일 - MVP 앱 디자인 완료
-  - 12월 12일 - MVP 앱 개발 완료
-- **팀 개편 후** (기획 2, 디자이너 2, **프론트엔드 개발 1**, 백엔드 개발 2)
-  - 1월 12일 - MVP 클라이언트용 웹 기획 및 디자인 완료
-  - 2월 2일 - MVP 클라이언트용 웹 개발 완료
-  - 3월 - 버전 2 출시 (이벤트 탐색 기능 추가, UI 개선, 티켓 결제 기능 추가, 웨이팅 등록 기능 추가)
-
 ### 주요 기능
 
-- 홈
-  - 사용가능한 티켓을 날짜별로 그룹화해서 보여줌
+- **홈**
+
+  - 사용 가능한 티켓을 날짜별로 그룹화된 카드 형태로 확인 가능
+  - Pan 제스쳐로 티켓 넘기기 인터렉션
   - 나의 QR코드 생성
-- 마이 페이지
-  - 내 티켓, 보낸 티켓, 받은 티켓을 보여줌
-  - 내 티켓은 사용 가능, 사용 완료, 만료/취소로 필터링
-- 이벤트
-  - 이벤트 정보 확인
-  - 이벤트의 위치를 정적, 동적 지도로 확인
-- 티켓
-  - 연락처 api를 사용해 친구에게 티켓 공유
+
+- **마이 페이지**
+
+  - 내 티켓: 사용 가능, 사용 완료, 만료/취소 상태별로 티켓을 필터링
+  - 보낸 티켓: 친구에게 전송된 티켓 목록 및 상태 확인
+  - 받은 티켓: 친구에게 받은 티켓 목록 확인
+
+- **이벤트**
+
+  - 이벤트 세부 정보 확인 (날짜, 장소, 주최자 정보)
+  - 네이버 지도를 사용하여 이벤트 위치를 정적 지도 및 동적 지도 형식으로 제공
+  - 이벤트 평가하기
+
+- **티켓**
+
+  - 내 연락처 API를 활용하여 친구와 티켓을 공유
+  - 티켓의 정보 확인
+
+- **설정**
+
+  - PUSH 알림 토글 및 시스템 알림 설정으로 이동
+  - 내 정보 수정
+
+- **알림**
+  - 친구에게 티켓을 받으면 PUSH 알림 수신
+  - 알림 스크린에서 알림 읽음 처리
 
 ## 사용 기술 스택
 
@@ -62,32 +56,6 @@ gantt
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-EC5990?style=for-the-badge&logo=react-hook-form&logoColor=white)
 ![Zod](https://img.shields.io/badge/Zod-1B1F24?style=for-the-badge&logoColor=white)
-
-## 구현한 기능
-
-- 애플, 카카오, 네이버 OAuth 구현
-- reanimated와 gesture-handler를 활용한 복잡한 인터랙션의 캐러셀 구현
-- FCM을 통한 실시간 푸시 알림 시스템 구축
-- 캡쳐 방지를 적용해 QR코드의 보안성 향상
-- SMS Retriever API 사용으로 안드로이드에서 회원가입 UX 향상
-- 이벤트 장소를 네이버 지도의 static map 및 dynamic map에 표시
-- Tailwind CSS, React Native Paper, React Navigation의 테마 통합
-
-## 실행 방법
-
-```bash
-# 프로젝트 클론
-git clone https://github.com/5unk3n/tixx-app.git
-
-# 의존성 설치
-cd app && yarn install
-
-# ios 의존성 설치 (필요한 경우)
-cd ios && pod install
-
-# 앱 실행
-yarn start
-```
 
 ## 디렉토리 구조
 
@@ -109,4 +77,20 @@ src
  ┣ types       # 타입 정의
  ┣ utils       # 유틸리티 함수
  ┗ App.tsx     # 앱의 진입점
+```
+
+## 실행 방법
+
+```bash
+# 프로젝트 클론
+git clone https://github.com/5unk3n/tixx-app.git
+
+# 의존성 설치
+cd app && yarn install
+
+# ios 의존성 설치 (필요한 경우)
+cd ios && pod install
+
+# 앱 실행
+yarn start
 ```
