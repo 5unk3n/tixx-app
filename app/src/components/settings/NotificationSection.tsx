@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { AppState, Linking, View } from 'react-native'
 import { Switch } from 'react-native-paper'
 import { checkNotifications } from 'react-native-permissions'
 
-import { UI } from '@/constants/ui'
 import { useUpdateUser } from '@/hooks/queries/useUpdateUser'
 import { User } from '@/types'
 
@@ -17,6 +17,7 @@ interface NotificationSectionProps {
 export default function NotificationSection({
 	user
 }: NotificationSectionProps) {
+	const { t } = useTranslation()
 	const { mutate: updateUser } = useUpdateUser()
 	const [isNotificationEnabled, setIsNotificationEnabled] = useState(false)
 
@@ -45,25 +46,28 @@ export default function NotificationSection({
 	}, [])
 
 	return (
-		<View className="mt-6 pb-3">
-			<CustomText variant="body3Medium" className="mx-5 mb-3 text-grayscale-5">
-				{UI.COMMON.NOTIFICATION}
+		<View className="mt-8 pb-3">
+			<CustomText
+				variant="body3Medium"
+				className="mx-5 mb-3 text-grayscale-400"
+			>
+				{t('common.notification.title')}
 			</CustomText>
 			<CustomListItem
 				onPress={() => Linking.openSettings()}
 				pointerEvents="box-only"
-				title={UI.COMMON.SETTING_NOTIFICATION}
-				right={() => <Switch value={isNotificationEnabled} />}
-				description={UI.COMMON.NOTIFICATION_DESCRIPTION}
+				title={t('common.notification.title')}
+				rightElement={<Switch value={isNotificationEnabled} />}
+				description={t('common.notification.description')}
 			/>
 			<CustomListItem
-				title={UI.COMMON.SETTING_MARKETING_NOTIFICATION}
-				right={() => (
+				title={t('common.notification.marketing')}
+				rightElement={
 					<Switch
 						value={!!user.marketingOptIn}
 						onChange={toggleMarketingNotification}
 					/>
-				)}
+				}
 			/>
 		</View>
 	)

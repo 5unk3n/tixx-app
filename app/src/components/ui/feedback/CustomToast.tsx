@@ -1,12 +1,12 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { BaseToast, ToastProps } from 'react-native-toast-message'
+import { BaseToast, BaseToastProps } from 'react-native-toast-message'
 
 import { useCustomTheme } from '@/hooks/useCustomTheme'
 
 import CustomIcon, { IconName } from '../display/CustomIcon'
 
-interface CustomToastProps extends ToastProps {
+interface CustomToastProps extends BaseToastProps {
 	icon: IconName
 }
 
@@ -24,7 +24,7 @@ export default function CustomToast({ icon, ...props }: CustomToastProps) {
 			borderRadius: 24,
 			borderLeftWidth: 0,
 			gap: 8,
-			backgroundColor: colors.grayscale[2]
+			backgroundColor: colors.grayscale[700]
 		},
 		container: {
 			flex: 0,

@@ -1,21 +1,22 @@
 import { QueryErrorResetBoundary } from '@tanstack/react-query'
 import React, { Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { Platform, StyleSheet, View } from 'react-native'
-import { ActivityIndicator, Dialog, Portal } from 'react-native-paper'
+import { useTranslation } from 'react-i18next'
+import { View } from 'react-native'
+import { ActivityIndicator, Portal } from 'react-native-paper'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import {
 	disableSecureView,
 	enabled,
 	enableSecureView
 } from 'react-native-screenshot-prevent'
 
-import { UI } from '@/constants/ui'
 import { useUser } from '@/hooks/queries/useUser'
-import { useCustomTheme } from '@/hooks/useCustomTheme'
 
 import QRContents from './QRContents'
 import ErrorFallback from '../error/ErrorFallback'
 import { CustomText } from '../ui/display/CustomText'
+import CustomDialog from '../ui/feedback/CustomDialog'
 import CustomIconButton from '../ui/input/CustomIconButton'
 
 interface QRDialogProps {
@@ -24,8 +25,9 @@ interface QRDialogProps {
 }
 
 export default function QRDialog({ visible, onDismiss }: QRDialogProps) {
-	const { fonts, colors } = useCustomTheme()
+	const { t } = useTranslation()
 	const { data: user } = useUser()
+	const insets = useSafeAreaInsets()
 
 	useEffect(() => {
 		if (visible) {
@@ -43,29 +45,20 @@ export default function QRDialog({ visible, onDismiss }: QRDialogProps) {
 		}
 	}, [visible])
 
-	const bottomPosition = Platform.OS === 'ios' ? 'bottom-0' : 'bottom-6'
-
 	return (
 		<Portal>
-			<Dialog
-				visible={visible}
-				onDismiss={onDismiss}
-				style={[styles.container, { backgroundColor: colors.grayscale[1] }]}
-			>
-				<Dialog.Title
-					style={[fonts.h1Semibold, styles.title]}
-					className="text-center"
-				>
-					{`${user?.nickname}${UI.USERS.QR_MODAL_TITLE}`}
-				</Dialog.Title>
-				<Dialog.Content style={styles.content}>
+			<CustomDialog visible={visible} onDismiss={onDismiss} usePortal={false}>
+				<CustomDialog.Title size="lg">
+					{t('profile.qr.title', { nickname: user?.nickname })}
+				</CustomDialog.Title>
+				<CustomDialog.Content>
 					<CustomText
 						variant="body1RegularLarge"
-						className="text-center mb-6 text-grayscale-5"
+						className="text-center mb-6 text-grayscale-400"
 					>
-						{UI.USERS.QR_MODAL_DESCRIPTION}
+						{t('profile.qr.description')}
 					</CustomText>
-					<View className="h-72 w-56 mx-auto">
+					<View className="h-72 w-56 mx-auto mb-14">
 						<QueryErrorResetBoundary>
 							{({ reset }) => (
 								<ErrorBoundary
@@ -83,33 +76,20 @@ export default function QRDialog({ visible, onDismiss }: QRDialogProps) {
 							)}
 						</QueryErrorResetBoundary>
 					</View>
-				</Dialog.Content>
-			</Dialog>
+				</CustomDialog.Content>
+			</CustomDialog>
 			{visible && (
-				<View className={`absolute w-full ${bottomPosition}`}>
+				<View
+					style={{ paddingBottom: insets.bottom }}
+					className={`absolute w-full bottom-0`}
+				>
 					<CustomIconButton
 						name="close"
 						onPress={onDismiss}
-						className="w-16 h-16 mx-auto bottom-5 rounded-full bg-primary"
+						className="w-[54] h-[54] mx-auto top-[3] rounded-full bg-primary"
 					/>
 				</View>
 			)}
 		</Portal>
 	)
 }
-
-const styles = StyleSheet.create({
-	container: {
-		marginHorizontal: 20,
-		paddingTop: 36,
-		paddingBottom: 46
-	},
-	title: {
-		marginTop: 0,
-		marginBottom: 16
-	},
-	content: {
-		paddingBottom: 0,
-		paddingHorizontal: 0
-	}
-})

@@ -3,11 +3,13 @@
  */
 
 import messaging from '@react-native-firebase/messaging'
+import React from 'react'
 import { AppRegistry } from 'react-native'
 import {
 	configureReanimatedLogger,
 	ReanimatedLogLevel
 } from 'react-native-reanimated'
+import './i18n'
 
 import { name as appName } from './app.json'
 import App from './src/App'
@@ -28,7 +30,7 @@ function HeadlessCheck({ isHeadless }) {
 	return <App />
 }
 
-messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+messaging().setBackgroundMessageHandler(async (_remoteMessage) => {
 	// TODO: 핸들링 추가하기
 })
 

@@ -1,42 +1,45 @@
 import { styled } from 'nativewind'
 import React from 'react'
-import { StyleSheet, View, ViewStyle } from 'react-native'
-import { Chip } from 'react-native-paper'
+import { useTranslation } from 'react-i18next'
+import { View, ViewStyle } from 'react-native'
 
 import { useCustomTheme } from '@/hooks/useCustomTheme'
 import { Tags } from '@/types'
 
+import CustomChip from '../ui/display/CustomChip'
+
 interface EventTagsProps {
 	tags: Tags
 	style?: ViewStyle
+	additionalTags?: string[]
 }
 
-function EventTags({ tags, style, ...props }: EventTagsProps) {
-	const { colors, fonts } = useCustomTheme()
+function EventTags({ tags, style, additionalTags, ...props }: EventTagsProps) {
+	const { t } = useTranslation()
+	const { colors } = useCustomTheme()
 
 	return (
 		<View className="flex-row flex-wrap gap-2" style={style} {...props}>
 			{tags.map((tag) => (
-				<Chip
-					key={tag.id}
-					style={[{ backgroundColor: colors.primary }, styles.chip]}
-					textStyle={[
-						fonts.body3Medium,
-						{ color: colors.onBackground },
-						styles.text
-					]}
-					compact
-				>
-					{tag.tag}
-				</Chip>
+				<View key={tag.id}>
+					<CustomChip>
+						{tag.tag === 'venue'
+							? t('events.tags.venue')
+							: tag.tag === 'party'
+								? t('events.tags.party')
+								: tag.tag === 'event'
+									? t('events.tags.event')
+									: tag.tag}
+					</CustomChip>
+				</View>
+			))}
+			{additionalTags?.map((tag) => (
+				<View key={tag}>
+					<CustomChip textStyle={{ color: colors.primary }}>{tag}</CustomChip>
+				</View>
 			))}
 		</View>
 	)
 }
-
-const styles = StyleSheet.create({
-	chip: { borderRadius: 4 },
-	text: { marginHorizontal: 12, marginVertical: 8 }
-})
 
 export default styled(EventTags)

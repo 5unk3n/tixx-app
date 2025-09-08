@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Image, ScrollView, StyleSheet, View } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 
@@ -8,15 +9,15 @@ import CustomIcon from '@/components/ui/display/CustomIcon'
 import { CustomText } from '@/components/ui/display/CustomText'
 import CustomDialog from '@/components/ui/feedback/CustomDialog'
 import CustomButton from '@/components/ui/input/CustomButton'
-import { UI } from '@/constants/ui'
 import { useActionEventTicketTransfer } from '@/hooks/queries/eventTickets/useActionEventTicketTransfer'
 import { useCustomTheme } from '@/hooks/useCustomTheme'
 import { MainStackParamList } from '@/types/navigation'
-import { formatTicketDate, formatTicketTime } from '@/utils/formatters'
+import { formatDateWithDay, formatTimeRange } from '@/utils/formatters'
 
 type Props = NativeStackScreenProps<MainStackParamList, 'SentTicketDetail'>
 
 export default function SentTicketDetailScreen({ navigation, route }: Props) {
+	const { t, i18n } = useTranslation()
 	const { colors } = useCustomTheme()
 	const initialEventTicketTransfer = route.params
 	const [eventTicketTransfer, setEventTicketTransfer] = useState(
@@ -26,7 +27,7 @@ export default function SentTicketDetailScreen({ navigation, route }: Props) {
 	const { mutateAsync: actionEventTicketTransfer } =
 		useActionEventTicketTransfer()
 
-	const handleCancel = async () => {
+	const handleCancelConfirm = async () => {
 		setIsVisible(false)
 		const responseEventTicketTransfer = await actionEventTicketTransfer({
 			action: 'cancel',
@@ -38,11 +39,11 @@ export default function SentTicketDetailScreen({ navigation, route }: Props) {
 		}))
 	}
 
-	const handlePress = () => {
+	const handleCancel = () => {
 		if (eventTicketTransfer.status === 1) {
 			setIsVisible(true)
 		} else {
-			navigation.navigate('SentTickets')
+			navigation.goBack()
 		}
 	}
 
@@ -64,10 +65,10 @@ export default function SentTicketDetailScreen({ navigation, route }: Props) {
 			{eventTicketTransfer.status !== 1 && (
 				<CustomText variant="h1Semibold" className="absolute mt-40 px-5">
 					{eventTicketTransfer.status === 2
-						? UI.TICKETS.ACCEPTED_TITLE
+						? t('tickets.messages.accepted')
 						: eventTicketTransfer.status === 3
-							? UI.TICKETS.SENT_REJECTED_TITLE
-							: UI.TICKETS.SENT_CANCELED_TITLE}
+							? t('tickets.messages.sentRejected')
+							: t('tickets.messages.sentCanceled')}
 				</CustomText>
 			)}
 			<View className="mt-[217]">
@@ -75,7 +76,7 @@ export default function SentTicketDetailScreen({ navigation, route }: Props) {
 					tags={eventTicketTransfer.eventTicket.event.tags}
 					className="mb-2"
 				/>
-				<CustomText variant="h1Semibold">
+				<CustomText variant="h1Semibold" className="mb-4">
 					{eventTicketTransfer.eventTicket.event.name}
 				</CustomText>
 				<CustomButton
@@ -83,65 +84,80 @@ export default function SentTicketDetailScreen({ navigation, route }: Props) {
 					size="sm"
 					labelVariant="body3Regular"
 					className="-ml-3 mb-4"
-					labelStyle={{ color: colors.grayscale[5] }}
+					labelStyle={{ color: colors.grayscale[400] }}
 					onPress={() =>
-						navigation.navigate(
-							'EventDetail',
-							eventTicketTransfer.eventTicket.event
-						)
+						navigation.navigate('EventDetail', {
+							eventId: eventTicketTransfer.eventTicket.event.id
+						})
 					}
 				>
-					{UI.TICKETS.VIEW_DETAIL}
+					{t('tickets.viewDetail')}
 				</CustomButton>
 			</View>
 			<View className="gap-4 pb-9 mb-auto">
 				<View className="flex-row">
 					<CustomIcon name="calendar" size={20} className="mr-2" />
-					<CustomText variant="body1Regular" className="text-grayscale-8">
-						{formatTicketDate(eventTicketTransfer.eventTicket.startAt)}
+					<CustomText variant="body1Regular" className="text-grayscale-100">
+						{formatDateWithDay(
+							eventTicketTransfer.eventTicket.ticket.startAt,
+							i18n.language
+						)}
 					</CustomText>
 				</View>
 				<View className="flex-row">
 					<CustomIcon name="time" size={20} className="mr-2" />
-					<CustomText variant="body1Regular" className="text-grayscale-8">
-						{formatTicketTime(
-							eventTicketTransfer.eventTicket.startAt,
-							eventTicketTransfer.eventTicket.endAt
+					<CustomText variant="body1Regular" className="text-grayscale-100">
+						{t(
+							'tickets.entryTime',
+							formatTimeRange(
+								eventTicketTransfer.eventTicket.ticket.startAt,
+								eventTicketTransfer.eventTicket.ticket.endAt
+							)
 						)}
 					</CustomText>
 				</View>
 				<View className="flex-row">
 					<CustomIcon name="place" size={20} className="mr-2" />
-					<CustomText variant="body1Regular" className="text-grayscale-8">
+					<CustomText variant="body1Regular" className="text-grayscale-100">
 						{eventTicketTransfer.eventTicket.event.place.name}
 					</CustomText>
 				</View>
 				<View className="flex-row">
 					<CustomIcon name="pin" size={20} className="mr-2" />
-					<CustomText variant="body1Regular" className="text-grayscale-8">
+					<CustomText variant="body1Regular" className="text-grayscale-100">
 						{eventTicketTransfer.eventTicket.event.memo}
 					</CustomText>
 				</View>
 			</View>
 			<CustomButton
-				onPress={handlePress}
+				onPress={handleCancel}
 				className="bottom-0 mt-auto mb-2"
 				colorVariant={
 					eventTicketTransfer.status === 1 ? 'secondary' : 'primary'
 				}
 			>
 				{eventTicketTransfer.status === 1
-					? UI.TICKETS.CANCEL_TRANSFER
-					: UI.COMMON.CONFIRM}
+					? t('tickets.actions.cancelTransfer')
+					: t('common.confirm')}
 			</CustomButton>
-			<CustomDialog
-				visible={isVisible}
-				title={UI.TICKETS.CANCEL_DIALOG_TITLE}
-				leftButtonText={UI.COMMON.CLOSE}
-				rightButtonText={UI.TICKETS.CANCEL_TRANSFER_ACTION}
-				onLeftPress={() => setIsVisible(false)}
-				onRightPress={handleCancel}
-			/>
+			<CustomDialog visible={isVisible}>
+				<CustomDialog.Title>
+					{t('tickets.messages.confirmCancel')}
+				</CustomDialog.Title>
+				<CustomDialog.Actions>
+					<CustomButton
+						flex
+						onPress={() => setIsVisible(false)}
+						colorVariant="secondary"
+						mode="contained"
+					>
+						{t('common.close')}
+					</CustomButton>
+					<CustomButton flex onPress={handleCancelConfirm} mode="contained">
+						{t('tickets.actions.confirmCancelTransfer')}
+					</CustomButton>
+				</CustomDialog.Actions>
+			</CustomDialog>
 		</ScrollView>
 	)
 }

@@ -3,9 +3,9 @@
  */
 
 import 'react-native'
-import { it } from '@jest/globals'
+import { jest, it } from '@jest/globals'
+import { render } from '@testing-library/react-native'
 import React from 'react'
-import renderer from 'react-test-renderer'
 
 import App from '../src/App'
 
@@ -14,5 +14,6 @@ import App from '../src/App'
 // Note: test renderer must be required after react-native.
 
 it('renders correctly', () => {
-	renderer.create(<App />)
+	render(<App />)
+	jest.runAllTimers() // 타이머 즉시 실행
 })

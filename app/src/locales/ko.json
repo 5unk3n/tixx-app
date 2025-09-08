@@ -1,0 +1,542 @@
+{
+	"common": {
+		"next": "다음",
+		"confirm": "확인",
+		"send": "전송",
+		"resend": "재전송",
+		"close": "닫기",
+		"accept": "수락",
+		"reject": "거절",
+		"cancel": "취소",
+		"myProfile": "마이",
+		"today": "오늘",
+		"retry": "다시 시도",
+		"viewMore": "더보기",
+		"ticketManagement": "티켓 관리",
+		"wishlist": "위시리스트",
+		"createEvent": "행사 개설하기",
+		"orderHistory": "결제내역",
+		"contactUs": "문의하기",
+		"instagram": "인스타그램",
+		"email": "이메일",
+		"location": "위치",
+		"date": "날짜",
+		"contactUs.selectMethod": "문의 방법을 선택해주세요",
+		"status": {
+			"waiting": "대기중",
+			"accepted": "수락완료",
+			"rejected": "거절",
+			"canceled": "취소"
+		},
+		"unit": {
+			"day": "{{day}}일",
+			"durationDays": "{{days}}일간",
+			"seconds": "{{value}}초",
+			"tickets": "{{count}}장",
+			"items": "{{count}}개"
+		},
+		"actions": {
+			"submit": "보내기",
+			"start": "시작하기",
+			"cancel": "취소하기",
+			"share": "공유하기",
+			"gift": "선물하기",
+			"register": "등록하기",
+			"reenter": "다시 입력하기",
+			"reregister": "다시등록하기",
+			"accept": "수락하기",
+			"reject": "거절하기"
+		},
+		"confirms": {
+			"accept": "수락 하시겠습니까?",
+			"reject": "거절 하시겠습니까?",
+			"cancelShare": "티켓 공유를 취소하시겠습니까?"
+		},
+		"permissions": {
+			"contactRequired": "연락처 접근 권한이 없습니다."
+		},
+		"settings": {
+			"title": "환경설정",
+			"appVersion": "앱 버전",
+			"currentVersion": "현재 버전 : {{version}}",
+			"latestVersion": "최신 버전",
+			"terms": "약관 및 정책",
+			"support": "고객센터",
+			"feedback": "피드백",
+			"feedbackTitle": "피드백을 작성해주세요",
+			"feedbackPlaceholder": "피드백을 작성해주세요",
+			"feedbackSubmitted": "피드백이 제출되었습니다.",
+			"notice": "공지사항",
+			"business": "사업자 정보",
+			"language": "언어 설정",
+			"apply": "입점 신청하기"
+		},
+		"notification": {
+			"title": "알림",
+			"settings": "알림 설정",
+			"description": "티켓 초대, 티켓 일정 알림을 실시간으로 안내해드립니다.",
+			"marketing": "마케팅 알림 수신 동의",
+			"noNotification": "알림이 없습니다.",
+			"noNotice": "공지사항이 없습니다.",
+			"tabs": {
+				"notice": "공지사항",
+				"information": "안내"
+			}
+		},
+		"errors": {
+			"unknownError": "오류가 발생했습니다.",
+			"tryAgainLater": "잠시 후 다시 시도해주세요.",
+			"dataFetchFailed": "데이터를 불러오는데 실패했습니다.",
+			"networkError": "네트워크 오류가 발생했습니다.",
+			"checkConnection": "인터넷 연결을 확인하고 다시 시도해주세요.",
+			"serverError": "서버 오류가 발생했습니다.",
+			"permissionDenied": "요청 권한이 없습니다.",
+			"requestNotFound": "존재하지 않거나 이미 처리된 요청입니다.",
+			"requestFailed": "요청 처리에 실패했습니다."
+		},
+		"edit": "수정",
+		"follow": "팔로우",
+		"following": "팔로잉",
+		"testMessage": "테스트",
+		"all": "전체"
+	},
+	"navigation": {
+		"verifyIdentity": "본인인증",
+		"checkProfile": "정보확인",
+		"ticketShare": "공유 상대 선택",
+		"transferCompletion": "티켓 초대",
+		"notification": "알림",
+		"myTickets": "내 티켓 관리",
+		"receivedTickets": "받은 티켓",
+		"sentTickets": "보낸 티켓",
+		"settings": "설정",
+		"editProfile": "{{nickname}}님의 정보",
+		"accountDeletion": "회원탈퇴",
+		"receivedTicketDetail": "예약 확정",
+		"sentTicketDetail": "상세 내역",
+		"feedback": "피드백",
+		"language": "언어 설정",
+		"registerGuestCode": "게스트코드 등록",
+		"ticketManagement": "티켓 관리",
+		"buyTicket": "티켓구매",
+		"payment": "결제",
+		"paymentResult": "결제완료",
+		"wishlist": "위시리스트",
+		"orderHistory": "결제내역",
+		"paymentDetail": "결제 상세내역",
+		"paymentCancelDetail": "취소 상세",
+		"myPage": "마이페이지",
+		"todayOpening": "오늘 오픈 이벤트",
+		"thisWeek": "이번주 오픈 이벤트",
+		"popular": "HOT 이벤트",
+		"nearbyEvents": "주변행사"
+	},
+	"auth": {
+		"logout": "로그아웃",
+		"accountDeletion": "회원탈퇴",
+		"checkProfile": "정보확인",
+		"lastLogin": "가장 최근 로그인",
+		"carrier": "통신사",
+		"selectCarrier": "통신사 선택",
+		"confirmLogout": "로그아웃 하시겠습니까?",
+		"accountDeletionTitle": "탈퇴하는 이유가 무엇인가요?",
+		"accountDeletionPlaceholder": "탈퇴 사유를 입력해주세요",
+		"verifiedMessage": "인증되었습니다",
+		"terms": {
+			"title": "서비스 이용을 위해\n약관에 동의해주세요.",
+			"agreeAll": "약관 전체 동의",
+			"ageVerification": "만 14세 이상 입니다. (필수)",
+			"serviceAgreement": "서비스 이용약관 동의 (필수)",
+			"privacyPolicy": "개인 정보 수집 / 이용 동의 (필수)",
+			"marketingAgreement": "이벤트 혜택 및 광고성 정보 수신 동의 (선택)"
+		},
+		"deletionSurvey": {
+			"tooOften": "서비스 이용 빈도가 낮아요",
+			"notEnough": "원하는 기능이나 서비스가 부족해요",
+			"privacy": "개인 정보 보호가 걱정돼요",
+			"tooManyNotifications": "알림이나 푸시 메세지가 너무 많아요",
+			"support": "고객 지원 서비스가 부족해요",
+			"price": "가격이나 결제에 문제가 있어요",
+			"other": "기타 (직접 입력)"
+		},
+		"loginWith": {
+			"naver": "네이버로 로그인",
+			"kakao": "카카오로 로그인",
+			"apple": "Apple로 로그인",
+			"google": "Google로 로그인"
+		},
+		"verification": {
+			"codePlaceholder": "인증번호 6자리를 입력해주세요",
+			"complete": "인증완료",
+			"notComplete": "미인증",
+			"verifyLater": "다음에 인증하기"
+		},
+		"errors": {
+			"authenticationFailed": "인증에 실패했습니다.",
+			"reLogin": "다시 로그인해주세요.",
+			"otherServiceUser": "다른 서비스로 가입된 사용자입니다.",
+			"invalidPhoneNumber": "올바른 휴대폰 번호 형식이 아닙니다.",
+			"alreadyExistPhone": "이미 가입된 전화번호입니다.",
+			"temporarilyUnavailablePhone": "일시적으로 서비스 불가능한 번호입니다.",
+			"tooManyAttempts": "오늘 인증 시도 횟수를 초과했습니다. 내일 다시 시도해주세요.",
+			"invalidCode": "인증번호를 다시 확인해주세요",
+			"verificationFailed": "인증코드 검증에 실패했습니다",
+			"expiredCode": "인증번호가 만료되었습니다",
+			"nonExistentAccount": "존재하지 않는 계정입니다."
+		}
+	},
+	"home": {
+		"thisWeekEvents": "이번주 오픈 이벤트",
+		"hotEvents": "HOT 이벤트",
+		"tixxPick": "TiXX PICK",
+		"hotVenue": "HOT 베뉴"
+	},
+	"events": {
+		"calendar": {
+			"selectedDateEvents": "{{date}} 이벤트"
+		},
+		"reaction": {
+			"title": "반응하기",
+			"description": "행사에 참여한 사람들의 반응입니다",
+			"like": "좋아요",
+			"dislike": "별로예요"
+		},
+		"tabs": {
+			"info": "정보",
+			"detail": "상세",
+			"realtime": "실시간",
+			"recommend": "추천",
+			"today": "오늘",
+			"thisWeek": "이번 주",
+			"hot": "HOT",
+			"calendar": "캘린더",
+			"venue": "베뉴",
+			"exhibition": "전시",
+			"concert": "공연",
+			"popup": "팝업"
+		},
+		"tags": {
+			"event": "행사",
+			"party": "파티",
+			"venue": "베뉴"
+		},
+		"buyTicket": "티켓 구매하기",
+		"detail": {
+			"title": "이벤트 상세",
+			"date": "행사일시",
+			"time": "행사시간",
+			"location": "행사장소",
+			"provided": "제공내역",
+			"notice": "행사 안내"
+		},
+		"thisWeek": {
+			"description": "이번주에 오픈하는 모든 이벤트를 확인해보세요"
+		},
+		"hot": {
+			"description": "인기 있는 이벤트를 모아서 확인해보세요"
+		},
+		"refreshSearch": "이 지역 재검색",
+		"snsLinks": {
+			"instagram": "인스타그램",
+			"tiktok": "틱톡",
+			"blog": "블로그",
+			"youtube": "유튜브",
+			"homepage": "홈페이지"
+		},
+		"noticeInfo": "안내 사항"
+	},
+	"tickets": {
+		"ticket": "티켓",
+		"viewDetail": "상세보기 >",
+		"payment": {
+			"title": "결제 수단 선택",
+			"totalAmount": "총 금액",
+			"paymentMethod": "결제 방법",
+			"paymentDate": "결제일시",
+			"paymentCompleted": "결제가 완료되었습니다",
+			"checkTicketHistory": "티켓내역에서 확인해주세요",
+			"goToHome": "홈으로 이동",
+			"viewHistory": "내역보기",
+			"agreeToPayment": "주문 내용을 확인했으며 결제에 동의합니다.",
+			"details": "자세히",
+			"pay": "결제하기",
+			"methods": {
+				"card": "카드결제",
+				"kakao": "카카오페이",
+				"toss": "토스페이",
+				"paypal": "페이팔"
+			},
+			"detail": {
+				"ticketInfo": "티켓 정보",
+				"eventName": "행사명",
+				"viewingDateTime": "관람 일시",
+				"paymentInfo": "결제 정보",
+				"paymentDateTime": "결제일시",
+				"paymentMethod": "결제 방법",
+				"ticket": "티켓",
+				"quantity": "수량",
+				"price": "가격",
+				"totalPaymentAmount": "총 결제 금액 ({{quantity}}매)"
+			},
+			"cancel": {
+				"completionDateTime": "취소완료일시",
+				"canceledTickets": "취소 티켓 {{quantity}}매",
+				"completedCancel": "취소 완료 {{method}}",
+				"purchaseDateTime": "구매날짜/시간 {{datetime}}",
+				"priceAndQuantity": "{{price}}원 | {{quantity}}매",
+				"requestInfo": "취소 신청 정보",
+				"requestDateTime": "신청 일시",
+				"completionTime": "완료 일시",
+				"refundInfo": "환불 정보",
+				"productPaymentAmount": "상품 결제 금액",
+				"refundMethod": "환불 수단",
+				"expectedRefundAmount": "환불 예정 금액",
+				"ticketQuantity": "티켓 취소 수량",
+				"canceledCount": "{{count}}매 취소",
+				"partialCanceled": "부분 취소 {{count}}매",
+				"partialPrefix": "부분 "
+			},
+			"easyPayTitle": "간편 결제",
+			"generalPayTitle": "일반 결제"
+		},
+		"quantity": "수량 : {{count}}",
+		"empty": "티켓이 없습니다.",
+		"myTickets": "내 티켓 관리",
+		"sentTickets": "보낸 티켓",
+		"receivedTickets": "받은 티켓",
+		"sharableTickets": "공유 가능한 티켓",
+		"ticketQuantity": "티켓 수량",
+		"ticketInfo": "티켓 정보",
+		"buyTicket": "티켓 구매하기",
+		"shareMessage": "[TIXX] {{nickname}}님이 {{eventName}}에 초대했습니다. 초대장을 열어 수락을 눌러주세요!\n앱이 없으신가요? 여기서 다운로드하세요: {{link}}",
+		"entryTime": "{{startTime}} - {{endTime}} 중 입장",
+		"from": "From. {{nickname}}님",
+		"to": "To. {{nickname}}님",
+		"names": {
+			"earlyBird": "얼리버드",
+			"standard": "일반"
+		},
+		"status": {
+			"used": "입장완료",
+			"expired": "입장 만료",
+			"canceled": "입장 취소"
+		},
+		"messages": {
+			"accepted": "초대에 수락하셨습니다.",
+			"sentCompleted": "초대장 전달이 완료되었습니다.",
+			"sentRejected": "초대장 전달이 거절되었습니다.",
+			"sentCanceled": "초대장 전달이 취소되었습니다.",
+			"confirmCancel": "초대장 전달을 취소하시겠습니까?",
+			"shareComplete": "공유가 완료되었습니다.",
+			"transferAcceptedSuccess": "티켓이 추가되었습니다.\n마이페이지 티켓내역에서 확인해주세요.",
+			"transferRejectedSuccess": "티켓 거절이 완료되었습니다.",
+			"shareCanceled": "티켓 공유가 취소되었습니다."
+		},
+		"actions": {
+			"cancel": "방문 취소",
+			"cancelTransfer": "초대장 전달 취소",
+			"confirmCancelTransfer": "전달 취소"
+		},
+		"notices": {
+			"beforeCancel": "취소 전 꼭 확인해주세요!",
+			"accountDeletion": "탈퇴 완료 시 사용자가 있는 모든 티켓은 소멸됩니다.",
+			"ticketDestruction": "취소 완료 시 해당 티켓은 소멸됩니다.",
+			"recovery": "소멸된 티켓은 복구가 어려우니 신중하게 결정하고 취소해주세요.",
+			"share": "틱스(TIXX) 어플이 설치되지 않은 분께는 초대장을 발송할 수 없습니다. 아래의 공유 버튼을 눌러 문자로 링크를 공유해 주세요."
+		},
+		"tabs": {
+			"available": "이용가능",
+			"used": "사용 완료",
+			"expiredOrCanceled": "만료/취소",
+			"myTickets": "티켓 내역",
+			"received": "받은 티켓",
+			"sent": "보낸 티켓"
+		},
+		"search": {
+			"contactPlaceholder": "티켓을 공유할 상대를 검색하세요",
+			"noResult": "검색 결과가 없습니다."
+		},
+		"errors": {
+			"noTickets": "티켓이 존재하지 않습니다.",
+			"cancelFailed": "티켓 취소에 실패했습니다.",
+			"alreadySent": "이 티켓은 이미 전송되었습니다.",
+			"selectUser": "티켓을 받을 사용자를 선택해주세요.",
+			"maxSelection": "최대 {{count}}명까지 선택할 수 있습니다.",
+			"alreadyUsed": "이미 사용된 티켓입니다.",
+			"deletedEvent": "이벤트가 삭제된 티켓입니다."
+		},
+		"cancel": {
+			"title": "취소 행사를 확인해주세요.",
+			"checkBeforeCancel": "취소 전 꼭 확인해주세요!",
+			"notices": {
+				"ticketDestruction": "취소완료 시 사용자가 소지한 모든 티켓은 소멸됩니다.",
+				"ticketRecovery": "소멸된 티켓은 복구가 어렵습니다. 신중하게 결정하고 취소해주세요.",
+				"refundMethod": "결제한 카드나 계좌로 환불금액이 입금됩니다."
+			},
+			"confirmDialog": {
+				"title": "티켓을 취소하시겠습니까?"
+			}
+		},
+		"refund": {
+			"title": "환불 티켓을 확인해주세요",
+			"checkBeforeRefund": "환불 전 꼭 확인해주세요!",
+			"notices": {
+				"ticketDestruction": "취소완료 시 사용자가 소지한 모든 티켓은 소멸됩니다.",
+				"ticketRecovery": "환불된 티켓은 복구가 어렵습니다. 신중하게 결정하고 취소해주세요.",
+				"refundMethod": "결제한 카드나 계좌로 환불금액이 입금됩니다."
+			},
+			"confirmDialog": {
+				"title": "티켓을 취소하시겠습니까?\n행사 {{days}}일 전 환불정책으로 인해\n위약금 {{amount}}원이 부과됩니다."
+			}
+		},
+		"usedSuccessfully": "티켓이 성공적으로 사용되었습니다.",
+		"staffConfirmation": "직원 확인하기",
+		"confirmEntry": "입장 하시겠습니까?\n티켓 총 {{count}}매 소진됩니다.",
+		"enter": "입장하기",
+		"staffConfirmationInfo": "직원 확인하기는 현장 입장 시 직원 확인용 입니다.",
+		"confirmGift": {
+			"title": "티켓을 선물하시겠습니까?"
+		}
+	},
+	"profile": {
+		"selectBirth": "생년월일을 선택해주세요.",
+		"fields": {
+			"name": "이름",
+			"nickname": "닉네임",
+			"email": "이메일",
+			"phone": "전화번호",
+			"birth": "생년월일",
+			"snsConnect": "SNS 연결"
+		},
+		"actions": {
+			"edit": "프로필 수정"
+		},
+		"placeholders": {
+			"nickname": "닉네임을 입력해주세요"
+		},
+		"qr": {
+			"title": "{{nickname}}님의 QR코드",
+			"description": "이용하려는 시설에\nQR코드로 체크인해주세요."
+		},
+		"edit": {
+			"title": "프로필 수정",
+			"subtitle": "프로필을 수정해주세요.",
+			"notice": "프로필 수정 시에는 최대한 신중하게 작성해주시기 바랍니다.",
+			"complete": "프로필 수정이 완료되었습니다.",
+			"confirm": "프로필 수정을 완료하시겠습니까?",
+			"confirmCancel": "프로필 수정을 취소하시겠습니까?"
+		},
+		"errors": {
+			"duplicatedNickname": "중복된 닉네임입니다.",
+			"nicknameLength": "10글자 이내로 설정해주세요",
+			"profileUpdateFailed": "프로필 수정 실패"
+		}
+	},
+	"coupon": {
+		"code": "게스트코드",
+		"codePlaceholder": "코드 입력",
+		"enterCode": "초대받은 행사의\n게스트코드를 입력해주세요",
+		"confirmTicket": "전달받은 티켓을 확인해주세요",
+		"messages": {
+			"registered": "티켓이 추가되었습니다!\n메인화면에서 확인하세요.",
+			"usageLimit": "게스트코드 사용 횟수를 초과했습니다.",
+			"alreadyRegistered": "이미 지급된 티켓입니다.",
+			"expired": "해당 게스트코드는 만료됐습니다.\n다른 게스트코드를 등록하시겠어요?"
+		},
+		"errors": {
+			"invalidCode": "올바른 게스트코드가 아니에요"
+		},
+		"notices": {
+			"disableInternationalCall": "국제 문자 수신 차단이 되어 있을 경우 인증 문자가 수신되지 않을 수 있습니다. 해외 SMS 차단을 해제해주세요."
+		}
+	},
+	"validation": {
+		"invalidType": "올바른 형식이 아닙니다.",
+		"tooSmall": "{{minimum}}글자 이상으로 설정해주세요",
+		"tooBig": "{{maximum}}글자 이내로 설정해주세요"
+	},
+	"orders": {
+		"selectTicket": "티켓을 선택해주세요",
+		"entranceFee": "입장료",
+		"currency": "원",
+		"pay": "결제하기",
+		"errors": {
+			"unknown": "결제 정보 확인 중 오류가 발생했습니다.",
+			"orderNotFound": "주문 정보를 찾을 수 없습니다.",
+			"userMismatch": "사용자 정보가 일치하지 않습니다.",
+			"invalidStatus": "주문 상태가 올바르지 않습니다.",
+			"amountMismatch": "결제 금액이 일치하지 않습니다.",
+			"expired": "결제 시간이 만료되었습니다.",
+			"failed": "결제가 정상적으로 처리되지 않았습니다.",
+			"systemError": "결제 시스템 오류가 발생했습니다."
+		},
+		"status": {
+			"pending": "결제 대기",
+			"ready": "준비 완료",
+			"paid": "결제 완료",
+			"cancelled": "취소 완료",
+			"partialCancelled": "부분 취소",
+			"failed": "결제 실패"
+		},
+		"paymentDetail": "결제 상세",
+		"cancelDetail": "취소 상세",
+		"repurchase": "재구매",
+		"purchaseDateTime": "구매날짜/시간 {{datetime}}",
+		"priceAndQuantity": "{{price}}원 | {{quantity}}매"
+	},
+	"hosts": {
+		"followers": "팔로워",
+		"hostedEventsCount": "개설행사",
+		"hostedEventsList": "개설된 이벤트",
+		"tabs": {
+			"all": "전체",
+			"before": "진행전",
+			"ongoing": "진행중",
+			"past": "행사종료"
+		},
+		"address": "주소",
+		"infoTitle": "{{hostName}} 정보",
+		"email": "이메일",
+		"contact": "연락처",
+		"instagram": "인스타그램",
+		"categories": {
+			"Brand": "브랜드",
+			"Promote": "프로모터",
+			"Venue": "베뉴"
+		}
+	},
+	"eventBottomSheet": {
+		"nearbyEventsCount": "이 지역 이벤트 {{count}}건"
+	},
+	"search": {
+		"placeholder": "참가하고 싶은 행사를 입력하세요",
+		"recent": "최근 검색어",
+		"historyOff": "검색기록 끄기",
+		"historyOn": "검색기록 켜기",
+		"clearAll": "전체삭제",
+		"historyNotExist": "최근 검색어가 없습니다.",
+		"historyDisabled": "검색 기록이 비활성화되어 있습니다.",
+		"eventCalendar": "이벤트 캘린더",
+		"recommendedHashtags": "추천 해시태그",
+		"sortNewest": "최신순",
+		"sortPopular": "추천순",
+		"select": "선택",
+		"recentlyViewed": "최근 본 이벤트 & 베뉴",
+		"recentlyViewedNotExist": "최근 본 이벤트, 베뉴가 없습니다.",
+		"cities": {
+			"서울특별시": "서울특별시",
+			"인천광역시": "인천광역시",
+			"대전광역시": "대전광역시",
+			"대구광역시": "대구광역시",
+			"울산광역시": "울산광역시",
+			"부산광역시": "부산광역시",
+			"광주광역시": "광주광역시",
+			"제주특별자치도": "제주특별자치도"
+		}
+	},
+	"version": {
+		"update_required_title": "업데이트 필요",
+		"update_required_message": "최신 기능과 보다 안정적인 환경을 위해 앱을 업데이트해주세요.",
+		"update": "업데이트"
+	}
+}

@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
+import { useTranslation } from 'react-i18next'
 import Toast from 'react-native-toast-message'
 
 import { transferEventTickets } from '@/apis/eventTickets/transferEventTickets'
@@ -7,6 +8,8 @@ import { EventTicketsTransferPayload } from '@/types'
 import { queryClient } from '@/utils/queryClient'
 
 export const useTransferEventTickets = () => {
+	const { t } = useTranslation()
+
 	return useMutation({
 		mutationFn: (payload: EventTicketsTransferPayload) =>
 			transferEventTickets(payload),
@@ -19,21 +22,21 @@ export const useTransferEventTickets = () => {
 					if (error.response.data.message.includes('pending')) {
 						Toast.show({
 							type: 'error',
-							text1: '이 티켓은 이미 전송되었습니다.'
+							text1: t('tickets.errors.alreadySent')
 						})
 					} else if (error.response.data.message.includes('toUserId')) {
 						Toast.show({
 							type: 'error',
-							text1: '티켓을 받을 사용자를 선택해주세요.'
+							text1: t('tickets.errors.selectUser')
 						})
 					}
 				} else if (error.response?.status === 404) {
 					Toast.show({
 						type: 'error',
-						text1: '티켓이 존재하지 않습니다.'
+						text1: t('tickets.errors.noTickets')
 					})
 				}
-				Toast.show({ type: 'error', text1: error.response?.data.message })
+				Toast.show({ type: 'error', text1: error.message })
 			}
 		}
 	})

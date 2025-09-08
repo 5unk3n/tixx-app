@@ -1,0 +1,542 @@
+{
+	"common": {
+		"next": "Next",
+		"confirm": "Confirm",
+		"send": "Send",
+		"resend": "Resend",
+		"close": "Close",
+		"accept": "Accept",
+		"reject": "Reject",
+		"cancel": "Cancel",
+		"myProfile": "My Profile",
+		"today": "Today",
+		"retry": "Retry",
+		"viewMore": "View More",
+		"ticketManagement": "Ticket Management",
+		"wishlist": "Wishlist",
+		"createEvent": "Create Event",
+		"orderHistory": "Order History",
+		"contactUs": "Contact Us",
+		"instagram": "Instagram",
+		"email": "Email",
+		"location": "Location",
+		"date": "Date",
+		"contactUs.selectMethod": "Please select a contact method",
+		"status": {
+			"waiting": "Waiting",
+			"accepted": "Accepted",
+			"rejected": "Rejected",
+			"canceled": "Canceled"
+		},
+		"unit": {
+			"day": "{{day}} day",
+			"durationDays": "{{days}} days",
+			"seconds": "{{value}} seconds",
+			"tickets": "{{count}} tickets",
+			"items": "{{count}}"
+		},
+		"actions": {
+			"submit": "Submit",
+			"start": "Start",
+			"cancel": "Cancel",
+			"share": "Share",
+			"gift": "Gift",
+			"register": "Register",
+			"reenter": "Re-enter",
+			"reregister": "Re-register",
+			"accept": "Accept",
+			"reject": "Reject"
+		},
+		"confirms": {
+			"accept": "Do you accept?",
+			"reject": "Do you reject?",
+			"cancelShare": "Do you want to cancel sharing the ticket?"
+		},
+		"permissions": {
+			"contactRequired": "No access to contacts."
+		},
+		"settings": {
+			"title": "Settings",
+			"appVersion": "App Version",
+			"currentVersion": "Current Version : {{version}}",
+			"latestVersion": "Latest Version",
+			"terms": "Terms and Policies",
+			"support": "Customer Support",
+			"feedback": "Feedback",
+			"feedbackTitle": "Please share your feedback",
+			"feedbackPlaceholder": "Please write your feedback",
+			"feedbackSubmitted": "Feedback has been submitted.",
+			"notice": "Notice",
+			"business": "Business Information",
+			"language": "Language Settings",
+			"apply": "Apply to Join"
+		},
+		"notification": {
+			"title": "Notification",
+			"settings": "Notification Settings",
+			"description": "Get real-time updates on ticket invitations and schedules.",
+			"marketing": "Allow marketing notifications.",
+			"noNotification": "No notifications.",
+			"noNotice": "No notices.",
+			"tabs": {
+				"notice": "Notice",
+				"information": "Information"
+			}
+		},
+		"errors": {
+			"unknownError": "An error has occurred.",
+			"tryAgainLater": "Please try again later.",
+			"dataFetchFailed": "Failed to fetch data.",
+			"networkError": "Network error occurred.",
+			"checkConnection": "Please check your internet connection and try again.",
+			"serverError": "Server error occurred.",
+			"permissionDenied": "Permission denied.",
+			"requestNotFound": "The request does not exist or has been processed already.",
+			"requestFailed": "Failed to process the request."
+		},
+		"edit": "Edit",
+		"follow": "Follow",
+		"following": "Following",
+		"testMessage": "Test",
+		"all": "All"
+	},
+	"navigation": {
+		"verifyIdentity": "Verify Identity",
+		"checkProfile": "Check Profile",
+		"ticketShare": "Select Recipient",
+		"transferCompletion": "Ticket Invitation",
+		"notification": "Notifications",
+		"myTickets": "My Tickets",
+		"receivedTickets": "Received Tickets",
+		"sentTickets": "Sent Tickets",
+		"settings": "Settings",
+		"editProfile": "{{nickname}}'s Profile",
+		"accountDeletion": "Delete Account",
+		"receivedTicketDetail": "Confirm Reservation",
+		"sentTicketDetail": "Details",
+		"feedback": "Feedback",
+		"language": "Language Settings",
+		"registerGuestCode": "Register Guest Code",
+		"ticketManagement": "Ticket Management",
+		"buyTicket": "Buy Ticket",
+		"payment": "Payment",
+		"paymentResult": "Payment Complete",
+		"wishlist": "Wishlist",
+		"orderHistory": "Order History",
+		"paymentDetail": "Payment Details",
+		"paymentCancelDetail": "Cancellation Details",
+		"myPage": "My Page",
+		"todayOpening": "Today's Opening Events",
+		"thisWeek": "This Week's Opening Events",
+		"popular": "HOT Events",
+		"nearbyEvents": "Nearby Events"
+	},
+	"auth": {
+		"logout": "Logout",
+		"accountDeletion": "Delete Account",
+		"checkProfile": "Check Profile",
+		"lastLogin": "Lastest Login",
+		"carrier": "Carrier",
+		"selectCarrier": "Select Carrier",
+		"confirmLogout": "Do you want to log out?",
+		"accountDeletionTitle": "What is your reason for leaving?",
+		"accountDeletionPlaceholder": "Please let us know why you're leaving.",
+		"verifiedMessage": "Verification Complete",
+		"terms": {
+			"title": "Please agree to the terms\nfor using the service.",
+			"agreeAll": "Agree to all terms",
+			"ageVerification": "I am over 14 years old. (Required)",
+			"serviceAgreement": "Agree to the terms of service (Required)",
+			"privacyPolicy": "Agree to the collection/use of personal information (Required)",
+			"marketingAgreement": "Agree to receive event benefits and promotional information (Optional)"
+		},
+		"deletionSurvey": {
+			"tooOften": "I use the service too infrequently",
+			"notEnough": "The features or services I want are lacking",
+			"privacy": "I am concerned about privacy",
+			"tooManyNotifications": "There are too many notifications or push messages",
+			"support": "Customer support is lacking",
+			"price": "There are issues with price or payment",
+			"other": "Other (please specify)"
+		},
+		"loginWith": {
+			"naver": "Sign in with Naver",
+			"kakao": "Sign in with Kakao",
+			"apple": "Sign in with Apple",
+			"google": "Sign in with Google"
+		},
+		"verification": {
+			"codePlaceholder": "Please enter the 6-digit verification code",
+			"complete": "Verified",
+			"notComplete": "Unverified",
+			"verifyLater": "Verify later"
+		},
+		"errors": {
+			"authenticationFailed": "Authentication failed.",
+			"reLogin": "Please log in again.",
+			"otherServiceUser": "User registered with another service.",
+			"invalidPhoneNumber": "The phone number format is invalid.",
+			"alreadyExistPhone": "Phone number already registered.",
+			"tooManyAttempts": "You have exceeded the number of verification attempts today. Please try again tomorrow.",
+			"invalidCode": "Please check the verification code again.",
+			"verificationFailed": "Verification code validation failed.",
+			"expiredCode": "The verification code has expired.",
+			"nonExistentAccount": "Non-existent account.",
+			"temporarilyUnavailablePhone": "This phone number is temporarily unavailable for service."
+		}
+	},
+	"home": {
+		"thisWeekEvents": "This Week's Events",
+		"hotEvents": "HOT Events",
+		"tixxPick": "TiXX PICK",
+		"hotVenue": "HOT Venue"
+	},
+	"events": {
+		"calendar": {
+			"selectedDateEvents": "{{date}} Events"
+		},
+		"reaction": {
+			"title": "React",
+			"description": "Reactions from Event Attendees",
+			"like": "Like",
+			"dislike": "Dislike"
+		},
+		"tabs": {
+			"info": "info",
+			"detail": "detail",
+			"realtime": "real-time",
+			"recommend": "Recommend",
+			"today": "Today",
+			"thisWeek": "This Week",
+			"hot": "Hot",
+			"calendar": "Calendar",
+			"venue": "Venue",
+			"exhibition": "Exhibition",
+			"concert": "Concert",
+			"popup": "Popup"
+		},
+		"tags": {
+			"event": "Event",
+			"party": "Party",
+			"venue": "Venue"
+		},
+		"buyTicket": "Buy Ticket",
+		"detail": {
+			"title": "Event Details",
+			"date": "Event Date",
+			"time": "Event Time",
+			"location": "Event Location",
+			"provided": "Provided Details",
+			"notice": "Event Notice"
+		},
+		"thisWeek": {
+			"description": "Check out all events opening this week"
+		},
+		"hot": {
+			"description": "Check out the most popular events"
+		},
+		"refreshSearch": "Refresh search",
+		"snsLinks": {
+			"instagram": "Instagram",
+			"tiktok": "TikTok",
+			"blog": "Blog",
+			"youtube": "YouTube",
+			"homepage": "Homepage"
+		},
+		"noticeInfo": "Notice Info"
+	},
+	"tickets": {
+		"ticket": "Ticket",
+		"viewDetail": "View Details >",
+		"payment": {
+			"title": "Select Payment Method",
+			"totalAmount": "Total Amount",
+			"paymentMethod": "Payment Method",
+			"paymentDate": "Payment Date",
+			"paymentCompleted": "Payment Completed",
+			"checkTicketHistory": "Check your ticket in My Tickets",
+			"goToHome": "Go to Home",
+			"viewHistory": "View History",
+			"agreeToPayment": "I have confirmed the order details and agree to payment.",
+			"details": "Details",
+			"pay": "Pay",
+			"methods": {
+				"card": "Card",
+				"kakao": "Kakao Pay",
+				"toss": "Toss Pay",
+				"paypal": "PayPal"
+			},
+			"detail": {
+				"ticketInfo": "Ticket Information",
+				"eventName": "Event Name",
+				"viewingDateTime": "Viewing Date/Time",
+				"paymentInfo": "Payment Information",
+				"paymentDateTime": "Payment Date/Time",
+				"paymentMethod": "Payment Method",
+				"ticket": "Ticket",
+				"quantity": "Quantity",
+				"price": "Price",
+				"totalPaymentAmount": "Total Payment for {{quantity}} tickets"
+			},
+			"cancel": {
+				"completionDateTime": "Cancellation Completed",
+				"canceledTickets": "{{quantity}} Canceled Tickets",
+				"completedCancel": "Canceled - {{method}}",
+				"purchaseDateTime": "Purchase Date/Time {{datetime}}",
+				"priceAndQuantity": "{{price}}KRW | {{quantity}} tickets",
+				"requestInfo": "Cancellation Request Information",
+				"requestDateTime": "Request Date/Time",
+				"completionTime": "Completion Time",
+				"refundInfo": "Refund Information",
+				"productPaymentAmount": "Product Payment Amount",
+				"refundMethod": "Refund Method",
+				"expectedRefundAmount": "Expected Refund Amount",
+				"ticketQuantity": "Canceled Ticket Quantity",
+				"canceledCount": "{{count}} tickets canceled",
+				"partialCanceled": "{{count}} tickets partially canceled",
+				"partialPrefix": "Partially "
+			},
+			"easyPayTitle": "Quick Payment",
+			"generalPayTitle": "General Payment"
+		},
+		"quantity": "Quantity : {{count}}",
+		"empty": "No tickets.",
+		"myTickets": "Manage My Tickets",
+		"sentTickets": "Sent Tickets",
+		"receivedTickets": "Received Tickets",
+		"sharableTickets": "Sharable Tickets",
+		"ticketQuantity": "Quantity",
+		"ticketInfo": "Ticket Information",
+		"buyTicket": "Buy Ticket",
+		"shareMessage": "[TIXX] {{nickname}} has invited you to {{eventName}}. Open the invitation and click accept!\nDon't have the app? Download it here: {{link}}",
+		"entryTime": "Entry {{startTime}} - {{endTime}}",
+		"from": "From. {{nickname}}",
+		"to": "To. {{nickname}}",
+		"names": {
+			"earlyBird": "Early Bird",
+			"standard": "Standard"
+		},
+		"status": {
+			"used": "Used",
+			"expired": "Expired",
+			"canceled": "Canceled"
+		},
+		"messages": {
+			"accepted": "Invitation accepted.",
+			"sentCompleted": "Invitation sent.",
+			"sentRejected": "Invitation rejected.",
+			"sentCanceled": "Invitation canceled.",
+			"confirmCancel": "Do you want to cancel the invitation?",
+			"shareComplete": "Share is completed.",
+			"transferAcceptedSuccess": "The ticket has been added.\nPlease check it in My Tickets on My Page.",
+			"transferRejectedSuccess": "Ticket rejection has been completed.",
+			"shareCanceled": "Ticket sharing has been canceled."
+		},
+		"actions": {
+			"cancel": "Cancel Visit",
+			"cancelTransfer": "Cancel Invitation Sending",
+			"confirmCancelTransfer": "Cancel Sending"
+		},
+		"notices": {
+			"beforeCancel": "Please check before canceling!",
+			"accountDeletion": "All tickets will be destroyed upon account deletion.",
+			"ticketDestruction": "The ticket will be destroyed upon cancellation.",
+			"recovery": "Destroyed tickets are difficult to recover, so please decide carefully before canceling.",
+			"share": "You cannot send invitations to those who do not have the TIXX app installed. Please share the link via text by tapping the share button below."
+		},
+		"tabs": {
+			"available": "Available",
+			"used": "Used",
+			"expiredOrCanceled": "Expired/Canceled",
+			"myTickets": "My Tickets",
+			"received": "Received",
+			"sent": "Sent"
+		},
+		"search": {
+			"contactPlaceholder": "Search your opponent to share your ticket",
+			"noResult": "No search results."
+		},
+		"errors": {
+			"noTickets": "No tickets exist.",
+			"cancelFailed": "Failed to cancel the ticket.",
+			"alreadySent": "This ticket has already been sent.",
+			"selectUser": "Please select the user to receive the ticket.",
+			"maxSelection": "You can select up to {{count}} people.",
+			"alreadyUsed": "This ticket has already been used.",
+			"deletedEvent": "This ticket is for a deleted event."
+		},
+		"cancel": {
+			"title": "Please check the event to cancel.",
+			"checkBeforeCancel": "Please check before canceling!",
+			"notices": {
+				"ticketDestruction": "All tickets held by the user will be destroyed upon cancellation.",
+				"ticketRecovery": "Destroyed tickets are difficult to recover, so please decide carefully before canceling.",
+				"refundMethod": "The refund amount will be deposited to the card or account used for payment."
+			},
+			"confirmDialog": {
+				"title": "Do you want to cancel the ticket?"
+			}
+		},
+		"refund": {
+			"title": "Please check the ticket to refund",
+			"checkBeforeRefund": "Please check before refund!",
+			"notices": {
+				"ticketDestruction": "All tickets held by the user will be destroyed upon cancellation.",
+				"ticketRecovery": "Refunded tickets are difficult to recover, so please decide carefully before canceling.",
+				"refundMethod": "The refund amount will be deposited to the card or account used for payment."
+			},
+			"confirmDialog": {
+				"title": "Do you want to cancel the ticket?\nDue to the refund policy {{days}} days before the event,\na penalty of {{amount}}KRW will be charged."
+			}
+		},
+		"usedSuccessfully": "Ticket used successfully.",
+		"staffConfirmation": "Staff Confirmation",
+		"confirmEntry": "Are you sure you want to enter?\nA total of {{count}} tickets will be used.",
+		"enter": "Enter",
+		"staffConfirmationInfo": "Staff confirmation is for on-site staff to verify entry.",
+		"confirmGift": {
+			"title": "Do you want to gift the ticket?"
+		}
+	},
+	"profile": {
+		"selectBirth": "Please select your date of birth.",
+		"fields": {
+			"name": "Name",
+			"nickname": "Nickname",
+			"email": "Email",
+			"phone": "Phone Number",
+			"birth": "Date of Birth",
+			"snsConnect": "Connect SNS"
+		},
+		"actions": {
+			"edit": "Edit Profile"
+		},
+		"placeholders": {
+			"nickname": "Please enter your nickname"
+		},
+		"qr": {
+			"title": "{{nickname}}'s QR Code",
+			"description": "Please scan the QR code at the facility to check in."
+		},
+		"edit": {
+			"title": "Edit Profile",
+			"subtitle": "Please edit your profile.",
+			"notice": "Please edit your profile carefully",
+			"complete": "Profile edit completed",
+			"confirm": "Do you want to complete the profile edit?",
+			"confirmCancel": "Do you want to cancel the profile edit?"
+		},
+		"errors": {
+			"duplicatedNickname": "Duplicated nickname.",
+			"nicknameLength": "Please set within 10 characters",
+			"profileUpdateFailed": "Profile update failed"
+		}
+	},
+	"coupon": {
+		"code": "Guest Code",
+		"codePlaceholder": "Enter Code",
+		"enterCode": "Enter the guest code for the event you're invited to.",
+		"confirmTicket": "Please check the ticket you received",
+		"messages": {
+			"registered": "The ticket has been added!\nCheck it on the main screen.",
+			"usageLimit": "The guest code usage limit has been exceeded.",
+			"alreadyRegistered": "The ticket has already been issued.",
+			"expired": "The guest code has expired.\nWould you like to register another guest code?"
+		},
+		"errors": {
+			"invalidCode": "Invalid guest code."
+		},
+		"notices": {
+			"disableInternationalCall": "You may not receive the verification code if your phone is set to block international SMS. Please check your settings to allow messages from overseas."
+		}
+	},
+	"validation": {
+		"invalidType": "Invalid format.",
+		"tooSmall": "Please set at least {{minimum}} characters.",
+		"tooBig": "Please set within {{maximum}} characters."
+	},
+	"orders": {
+		"selectTicket": "Please select a ticket",
+		"entranceFee": "Entrance Fee",
+		"currency": "KRW",
+		"pay": "Pay",
+		"errors": {
+			"unknown": "An error occurred while verifying payment information.",
+			"orderNotFound": "Order information not found.",
+			"userMismatch": "User information does not match.",
+			"invalidStatus": "Invalid order status.",
+			"amountMismatch": "Payment amount does not match.",
+			"expired": "Payment has expired.",
+			"failed": "Payment was not processed successfully.",
+			"systemError": "Payment system error occurred."
+		},
+		"status": {
+			"pending": "Payment Pending",
+			"ready": "Ready",
+			"paid": "Payment Completed",
+			"cancelled": "Cancelled",
+			"partialCancelled": "Partially Cancelled",
+			"failed": "Payment Failed"
+		},
+		"paymentDetail": "Payment Details",
+		"cancelDetail": "Cancellation Details",
+		"repurchase": "Buy Again",
+		"purchaseDateTime": "Purchase Date/Time {{datetime}}",
+		"priceAndQuantity": "{{price}}KRW | {{quantity}} tickets"
+	},
+	"hosts": {
+		"followers": "Followers",
+		"hostedEventsCount": "Hosted Events",
+		"hostedEventsList": "Hosted Events",
+		"tabs": {
+			"all": "All",
+			"before": "Upcoming",
+			"ongoing": "Ongoing",
+			"past": "Ended"
+		},
+		"address": "Address",
+		"infoTitle": "{{hostName}} Info",
+		"email": "Email",
+		"contact": "Contact",
+		"instagram": "Instagram",
+		"categories": {
+			"Brand": "Brand",
+			"Promote": "Promoter",
+			"Venue": "Venue"
+		}
+	},
+	"eventBottomSheet": {
+		"nearbyEventsCount": "Nearby events {{count}}"
+	},
+	"search": {
+		"placeholder": "Please enter a search term",
+		"recent": "Recent Searches",
+		"historyOff": "Turn Off Search History",
+		"historyOn": "Turn On Search History",
+		"clearAll": "Clear All",
+		"historyNotExist": "No search history.",
+		"historyDisabled": "Search history is disabled.",
+		"eventCalendar": "Event Calendar",
+		"recommendedHashtags": "Recommended Hashtags",
+		"sortNewest": "Newest",
+		"sortPopular": "Recommended",
+		"select": "Select",
+		"recentlyViewed": "Recently Viewed Events & Venues",
+		"recentlyViewedNotExist": "No recently viewed events or venues.",
+		"cities": {
+			"서울특별시": "Seoul",
+			"인천광역시": "Incheon",
+			"대전광역시": "Daejeon",
+			"대구광역시": "Daegu",
+			"울산광역시": "Ulsan",
+			"부산광역시": "Busan",
+			"광주광역시": "Gwangju",
+			"제주특별자치도": "Jeju"
+		}
+	},
+	"version": {
+		"update_required_title": "Update Required",
+		"update_required_message": "Please update the app for the latest features and a more stable experience.",
+		"update": "Update"
+	}
+}

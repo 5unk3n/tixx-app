@@ -1,7 +1,9 @@
+import { CountryCode, parsePhoneNumberWithError } from 'libphonenumber-js'
 import { useCallback, useState } from 'react'
 import { Platform } from 'react-native'
 import Contacts from 'react-native-contacts'
 import { Contact } from 'react-native-contacts/type'
+import { getCountry } from 'react-native-localize'
 import {
 	check,
 	Permission,
@@ -11,14 +13,21 @@ import {
 } from 'react-native-permissions'
 
 import { getNicknames } from '@/apis/users/getNicknames'
-import { normalizePhone } from '@/utils/formatters'
 
 import { useUser } from './queries/useUser'
 
+export type ContactWithUserInfo = Contact & {
+	id: string
+	userId: number | null
+	nickname: string
+	phoneNumber: string
+}
+
 export const useContacts = () => {
 	const { data: user } = useUser()
-	const [contacts, setContacts] = useState<Contact[]>([])
+	const [contacts, setContacts] = useState<ContactWithUserInfo[]>([])
 	const [hasPermission, setHasPermission] = useState<boolean>(false)
+	const country = getCountry()
 
 	const CONTACT_PERMISSION = Platform.select({
 		ios: PERMISSIONS.IOS.CONTACTS,
@@ -48,6 +57,34 @@ export const useContacts = () => {
 		}
 	}, [CONTACT_PERMISSION])
 
+	const getContactsWithNickname = async (
+		contactsWithPhone: ContactWithUserInfo[]
+	) => {
+		const numbers = contactsWithPhone.map((contact) => contact.phoneNumber)
+		const chunkSize = 100
+		const nicknamePromises = []
+
+		for (let i = 0; i < numbers.length; i += chunkSize) {
+			const chunk = numbers.slice(i, i + chunkSize)
+			nicknamePromises.push(getNicknames(chunk))
+		}
+
+		const nicknameChunks = await Promise.all(nicknamePromises)
+		const nicknames = nicknameChunks.flat()
+
+		return contactsWithPhone.map((contact) => {
+			const nicknameEntry = nicknames.find(
+				(nickname) => nickname.phone === contact.phoneNumber
+			)!
+
+			return {
+				...contact,
+				userId: nicknameEntry.id,
+				nickname: nicknameEntry?.nickname || ''
+			} satisfies ContactWithUserInfo
+		})
+	}
+
 	const loadContacts = useCallback(async () => {
 		try {
 			const permission = await requestPermission()
@@ -57,52 +94,40 @@ export const useContacts = () => {
 
 			const fetchedContacts = await Contacts.getAll()
 
-			const filteredContacts = fetchedContacts.filter(
-				(contact) =>
-					contact.phoneNumbers.length > 0 &&
-					normalizePhone(contact.phoneNumbers[0]?.number) !== user?.phone
+			const contactsWithAllNumbers = fetchedContacts
+				// 여러 번호를 가진 연락처는 개별 연락처로 처리
+				.flatMap((contact) =>
+					contact.phoneNumbers.map((phoneNumber, index) => {
+						let e164PhoneNumber = phoneNumber.number
+						try {
+							e164PhoneNumber = parsePhoneNumberWithError(
+								phoneNumber.number,
+								country as CountryCode
+							).format('E.164')
+						} catch (error) {
+							console.error(error)
+						}
+
+						return {
+							...contact,
+							id: contact.recordID + `-${index}`,
+							phoneNumber: e164PhoneNumber,
+							displayName: `${contact.familyName || ''}${contact.givenName || ''}`,
+							nickname: '',
+							userId: null
+						} satisfies ContactWithUserInfo
+					})
+				)
+				// 내 번호와 같은 연락처 제거
+				.filter((contact) => contact.phoneNumber !== user?.phone)
+
+			const contactsWithPhoneAndNickname = await getContactsWithNickname(
+				contactsWithAllNumbers
 			)
 
-			const formattedContacts = filteredContacts.map((contact) => ({
-				...contact,
-				displayName: `${contact.familyName || ''}${contact.givenName || ''}`,
-				phoneNumbers: contact.phoneNumbers.map((number) => ({
-					...number,
-					number: normalizePhone(number.number)
-				})),
-				nickname: ''
-			}))
-
-			const numbers = formattedContacts
-				.map((contact) => contact.phoneNumbers[0]?.number)
-				.filter(Boolean) // 유효한 번호만 필터링
-
-			const chunkSize = 100
-			const nicknamePromises = []
-			for (let i = 0; i < numbers.length; i += chunkSize) {
-				const chunk = numbers.slice(i, i + chunkSize)
-				nicknamePromises.push(getNicknames(chunk))
-			}
-			const nicknameChunks = await Promise.all(nicknamePromises)
-			const nicknames = nicknameChunks.flat()
-
-			const contactsWithNickname = formattedContacts.map((contact) => {
-				const primaryNumber = contact.phoneNumbers[0]?.number
-				const nicknameEntry = nicknames.find(
-					(nickname) => nickname.phone === primaryNumber
-				)
-				return {
-					...contact,
-					nickname: nicknameEntry?.nickname || '',
-					id: nicknameEntry?.id
-				}
-			}) as Contact[]
-
 			setContacts(
-				contactsWithNickname.sort((a, b) => {
-					//@ts-ignore
+				contactsWithPhoneAndNickname.sort((a, b) => {
 					const hasNicknameA = a.nickname ? 1 : 0
-					//@ts-ignore
 					const hasNicknameB = b.nickname ? 1 : 0
 
 					if (hasNicknameA !== hasNicknameB) {
@@ -117,7 +142,7 @@ export const useContacts = () => {
 		} catch (err) {
 			console.error(err)
 		}
-	}, [requestPermission])
+	}, [country, requestPermission, user?.phone])
 
 	return {
 		contacts,

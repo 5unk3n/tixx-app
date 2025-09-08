@@ -22,7 +22,7 @@ export default function EventTicketCard({
 			onPress={() => setIsDetailVisible((prev) => !prev)}
 		>
 			<View>
-				<BaseTicketCard eventTicket={eventTicket} />
+				<BaseTicketCard ticket={eventTicket.ticket} event={eventTicket.event} />
 				{isDetailVisible && (
 					<TicketCardDetailOverlay eventTicket={eventTicket} />
 				)}

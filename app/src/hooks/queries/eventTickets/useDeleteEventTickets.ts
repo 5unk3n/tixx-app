@@ -1,11 +1,14 @@
 import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
+import { useTranslation } from 'react-i18next'
 import Toast from 'react-native-toast-message'
 
 import { deleteEventTicket } from '@/apis/eventTickets/deleteEventTicket'
 import { queryClient } from '@/utils/queryClient'
 
 export const useDeleteEventTickets = () => {
+	const { t } = useTranslation()
+
 	return useMutation({
 		mutationFn: async ({ eventTicketIds }: { eventTicketIds: number[] }) => {
 			const deletePromises = eventTicketIds.map((eventTicketId) =>
@@ -23,12 +26,12 @@ export const useDeleteEventTickets = () => {
 				if (error.response?.status === 404) {
 					Toast.show({
 						type: 'error',
-						text1: '티켓이 존재하지 않습니다.'
+						text1: t('tickets.errors.noTickets')
 					})
 				} else {
 					Toast.show({
 						type: 'error',
-						text1: '티켓 취소에 실패했습니다.'
+						text1: t('tickets.errors.cancelFailed')
 					})
 				}
 			}

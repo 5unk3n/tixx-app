@@ -1,13 +1,21 @@
+import { useFocusEffect } from '@react-navigation/native'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { differenceInMilliseconds } from 'date-fns'
+import { useCallback, useState } from 'react'
+import {
+	disableSecureView,
+	enabled,
+	enableSecureView
+} from 'react-native-screenshot-prevent'
 
 import { getQRCode } from '@/apis/users/getQRCode'
 
 import { useRemainingTime } from '../useRemainingTime'
 
-const GC_TIME = 1000 * 30
+const STALE_GC_TIME_MS = 1000 * 30
 
 export const useQRCode = () => {
+	const [isFocused, setIsFocused] = useState(false)
+
 	const {
 		data: QRCode,
 		refetch,
@@ -16,14 +24,8 @@ export const useQRCode = () => {
 	} = useSuspenseQuery({
 		queryKey: ['qrcode'],
 		queryFn: getQRCode,
-		staleTime: (query) =>
-			query.state.data
-				? differenceInMilliseconds(
-						query.state.data?.metadata.expiredAt,
-						new Date()
-					)
-				: 0,
-		gcTime: GC_TIME,
+		staleTime: STALE_GC_TIME_MS,
+		gcTime: STALE_GC_TIME_MS,
 		retry: 3
 	})
 
@@ -31,7 +33,25 @@ export const useQRCode = () => {
 		QRCode?.metadata.expiredAt || new Date().toString()
 	)
 
-	if (isExpired) {
+	useFocusEffect(
+		useCallback(() => {
+			setIsFocused(true)
+			enabled(true)
+			if (!__DEV__) {
+				enableSecureView()
+			}
+
+			return () => {
+				setIsFocused(false)
+				enabled(false)
+				if (!__DEV__) {
+					disableSecureView()
+				}
+			}
+		}, [])
+	)
+
+	if (isExpired && !isFetching && isFocused) {
 		refetch()
 	}
 

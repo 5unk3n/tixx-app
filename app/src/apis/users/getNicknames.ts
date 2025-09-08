@@ -3,6 +3,7 @@ import qs from 'qs'
 import { API_PATH } from '@/constants/apis'
 import axiosInstance from '@/utils/axiosInstance'
 import { NicknameResponseSchema } from '@/utils/schemas'
+import { validateApiResponse } from '@/utils/validateApiResponse'
 
 export const getNicknames = async (phoneNumbers: string[]) => {
 	const response = await axiosInstance.get(API_PATH.USER.NICKNAMES, {
@@ -10,6 +11,5 @@ export const getNicknames = async (phoneNumbers: string[]) => {
 		paramsSerializer: (params) =>
 			qs.stringify(params, { arrayFormat: 'repeat' })
 	})
-	// return NicknameResponseSchema.parse(response.data)
-	return NicknameResponseSchema.parse(response.data)
+	return validateApiResponse(response.data, NicknameResponseSchema)
 }

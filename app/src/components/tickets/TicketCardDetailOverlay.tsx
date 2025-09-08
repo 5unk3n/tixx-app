@@ -1,12 +1,13 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { Card } from 'react-native-paper'
 
-import { UI } from '@/constants/ui'
 import { useCustomTheme } from '@/hooks/useCustomTheme'
 import { EventTicket } from '@/types'
+import { formatDDay } from '@/utils/formatters'
 
 import EventInfo from '../events/EventInfo'
 import EventTags from '../events/EventTags'
@@ -22,19 +23,24 @@ export default function TicketCardDetailOverlay({
 	eventTicket,
 	actions
 }: TicketCardDetailOverlayProps) {
+	const { t } = useTranslation()
 	const { colors } = useCustomTheme()
 	const navigation = useNavigation()
 
 	return (
-		<View className="absolute w-full h-full">
+		<View className="absolute w-full h-full rounded-xl border-[1px] border-t-0 border-grayscale-700">
 			<Card.Content className="flex-1 rounded-xl p-0 overflow-hidden">
 				<LinearGradient
 					className="flex-1 px-5 pb-4"
-					colors={['transparent', colors.grayscale[1], colors.grayscale[1]]}
+					colors={['transparent', colors.grayscale[900], colors.grayscale[900]]}
 				>
 					<View className="mt-auto ">
-						<EventTags tags={eventTicket.event.tags} className="mb-2" />
-						<CustomText variant="h1Semibold">
+						<EventTags
+							tags={eventTicket.event.tags}
+							additionalTags={[formatDDay(eventTicket.ticket.startAt)]}
+							className="mb-2"
+						/>
+						<CustomText variant="h1Semibold" numberOfLines={4}>
 							{eventTicket.event.name}
 						</CustomText>
 						<CustomButton
@@ -42,12 +48,14 @@ export default function TicketCardDetailOverlay({
 							size="sm"
 							labelVariant="body3Regular"
 							className="-ml-3"
-							labelStyle={{ color: colors.grayscale[5] }}
+							labelStyle={{ color: colors.grayscale[400] }}
 							onPress={() =>
-								navigation.navigate('EventDetail', eventTicket.event)
+								navigation.navigate('EventDetail', {
+									eventId: eventTicket.event.id
+								})
 							}
 						>
-							{UI.TICKETS.VIEW_DETAIL}
+							{t('tickets.viewDetail')}
 						</CustomButton>
 					</View>
 					<View className="mt-4 mb-10">

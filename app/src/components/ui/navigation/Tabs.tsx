@@ -7,7 +7,7 @@ import { CustomText } from '../display/CustomText'
 interface TabsContextType<T extends string> {
 	value: T
 	onChange: (value: T) => void
-	type?: 'underline' | 'filled'
+	type?: 'underline' | 'outline' | 'dot'
 }
 
 const TabsContext = createContext<TabsContextType<any> | null>(null)
@@ -35,7 +35,8 @@ export default function Tabs<T extends string>({
 }: TabsProps<T>) {
 	const classNames = {
 		tabsUnderline: 'flex-row sticky bg-background',
-		tabsFilled: 'flex-row gap-3'
+		tabsOutline: 'flex-row gap-3',
+		tabsDot: 'flex-row gap-2'
 	}
 
 	return (
@@ -44,7 +45,9 @@ export default function Tabs<T extends string>({
 				className={
 					type === 'underline'
 						? classNames.tabsUnderline
-						: classNames.tabsFilled
+						: type === 'outline'
+							? classNames.tabsOutline
+							: classNames.tabsDot
 				}
 				{...props}
 			>
@@ -65,15 +68,20 @@ function Tab<T extends string>({ value, label, ...props }: TabProps<T>) {
 	const isActive = value === currentValue
 
 	const classNames = {
-		underline: 'flex-1 py-3 items-center border-b-[1px] border-grayscale-2',
+		underline: 'flex-1 py-3 items-center border-b-[1px] border-grayscale-700',
 		underlineActive:
-			'flex-1 py-3 items-center border-b-[1px] border-grayscale-2 border-grayscale-8',
-		underlineText: 'text-grayscale-3',
-		underlineTextActive: 'text-grayscale-8',
-		filled: 'px-3 py-[10] bg-grayscale-1 rounded-lg',
-		filledActive: 'px-3 py-[10] bg-primary rounded-lg',
-		filledText: 'text-grayscale-w',
-		filledTextActive: 'text-grayscale-w'
+			'flex-1 py-3 items-center border-b-[1px] border-grayscale-700 border-grayscale-100',
+		underlineText: 'text-grayscale-600',
+		underlineTextActive: 'text-grayscale-100',
+		outline: 'px-[19] py-[9] rounded-[20px] overflow-hidden',
+		outlineActive:
+			'px-[18] py-[8] border border-primary rounded-[20px] overflow-hidden',
+		outlineText: 'text-grayscale-0',
+		outlineTextActive: 'text-grayscale-0',
+		dot: 'px-[19] py-[9]',
+		dotActive: 'px-[19] py-[9]',
+		dotText: 'text-grayscale-500',
+		dotTextActive: 'text-grayscale-0'
 	}
 
 	return (
@@ -85,26 +93,40 @@ function Tab<T extends string>({ value, label, ...props }: TabProps<T>) {
 					? isActive
 						? classNames.underlineActive
 						: classNames.underline
-					: isActive
-						? classNames.filledActive
-						: classNames.filled
+					: type === 'outline'
+						? isActive
+							? classNames.outlineActive
+							: classNames.outline
+						: isActive
+							? classNames.dotActive
+							: classNames.dot
 			}
+			borderless
 			{...props}
 		>
-			<CustomText
-				variant="body1Medium"
-				className={
-					type === 'underline'
-						? isActive
-							? classNames.underlineTextActive
-							: classNames.underlineText
-						: isActive
-							? classNames.filledTextActive
-							: classNames.filledText
-				}
-			>
-				{label}
-			</CustomText>
+			<View>
+				<CustomText
+					variant="body1Medium"
+					className={
+						type === 'underline'
+							? isActive
+								? classNames.underlineTextActive
+								: classNames.underlineText
+							: type === 'outline'
+								? isActive
+									? classNames.outlineTextActive
+									: classNames.outlineText
+								: isActive
+									? classNames.dotTextActive
+									: classNames.dotText
+					}
+				>
+					{label}
+				</CustomText>
+				{type === 'dot' && isActive && (
+					<CustomText className="text-center">•</CustomText>
+				)}
+			</View>
 		</TouchableRipple>
 	)
 }

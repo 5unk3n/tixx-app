@@ -1,37 +1,60 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import CustomHeader from '@/components/ui/navigation/CustomHeader'
-import CustomTabBar from '@/components/ui/navigation/CustomTabBar'
-import { useUser } from '@/hooks/queries/useUser'
+import {
+	MainTabHeader,
+	MyPageHeader
+} from '@/components/ui/navigation/BottomTabHeader'
+import CustomTabBarWrapper from '@/components/ui/navigation/CustomTabBarWrapper'
 import HomeScreen from '@/screens/mainTab/HomeScreen'
 import MyPageScreen from '@/screens/mainTab/MyPageScreen'
+import QRCodeScreen from '@/screens/mainTab/QRCodeScreen'
+import SearchScreen from '@/screens/mainTab/SearchScreen'
+import TicketsScreen from '@/screens/mainTab/TicketsScreen'
 import { MainTabParamList } from '@/types/navigation'
 
 const MainTab = createBottomTabNavigator<MainTabParamList>()
 
 export default function MainTabNavigator() {
-	const { data: user } = useUser()
+	const { t } = useTranslation()
 
 	return (
-		<MainTab.Navigator
-			initialRouteName="Home"
-			tabBar={(props) => <CustomTabBar {...props} />}
-		>
+		<MainTab.Navigator initialRouteName="Home" tabBar={CustomTabBarWrapper}>
 			<MainTab.Screen
 				name="Home"
 				component={HomeScreen}
 				options={{
-					header: () => <CustomHeader hasLogo hasNotification />
+					header: MainTabHeader
+				}}
+			/>
+			<MainTab.Screen
+				name="Tickets"
+				component={TicketsScreen}
+				options={{
+					header: MainTabHeader
+				}}
+			/>
+			<MainTab.Screen
+				name="QRCode"
+				component={QRCodeScreen}
+				options={{
+					header: MainTabHeader
+				}}
+			/>
+			<MainTab.Screen
+				name="Search"
+				component={SearchScreen}
+				options={{
+					header: () => null
 				}}
 			/>
 			<MainTab.Screen
 				name="MyPage"
 				component={MyPageScreen}
 				options={{
-					header: () => (
-						<CustomHeader title={user?.nickname} hasEdit hasSettings />
-					)
+					header: MyPageHeader,
+					title: t('navigation.myPage')
 				}}
 			/>
 		</MainTab.Navigator>

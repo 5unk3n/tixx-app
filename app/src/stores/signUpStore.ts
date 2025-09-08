@@ -4,7 +4,16 @@ import { OAuthProvider, SignUpInput } from '@/types'
 
 type SignUpData = Omit<SignUpInput, 'nickname'>
 
-interface SignUpState extends SignUpData {
+interface SignUpState {
+	accessToken: string
+	birthYYYYMMDD: string | null
+	email: string
+	marketingOptIn: number
+	name: string
+	phone: string
+	provider: OAuthProvider
+	verified: number
+	fcmToken: string | null
 	setOAuthData: (data: Partial<SignUpData>) => void
 	reset: () => void
 }
@@ -13,20 +22,22 @@ interface SignUpState extends SignUpData {
 // FIXME: 타입 불일치 수정
 export const useSignUpStore = create<SignUpState>((set) => ({
 	accessToken: '',
-	birthYYYYMMDD: '',
+	birthYYYYMMDD: null,
 	email: '',
 	marketingOptIn: 0,
 	name: '',
 	phone: '',
+	verified: 0,
 	provider: 'none' as OAuthProvider,
 	setOAuthData: (data) => set(data),
 	reset: () =>
 		set({
-			birthYYYYMMDD: '',
+			birthYYYYMMDD: null,
 			email: '',
 			marketingOptIn: 0,
 			name: '',
 			phone: '',
+			verified: 0,
 			provider: 'none' as OAuthProvider
 		})
 }))

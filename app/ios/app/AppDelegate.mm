@@ -1,10 +1,13 @@
 #import "AppDelegate.h"
 
 #import <React/RCTBundleURLProvider.h>
+#import <React/RCTLinkingManager.h>
+#import <RNAppsFlyer.h>
 #import <RNKakaoLogins.h>
 #import <NaverThirdPartyLogin/NaverThirdPartyLoginConnection.h>
 #import <FirebaseCore/FirebaseCore.h>
 #import "RNSplashScreen.h"
+#import "StallionModule.h"
 
 @implementation AppDelegate
 
@@ -34,7 +37,15 @@
     return [RNKakaoLogins handleOpenUrl: url];
   }
 
-  return NO;
+  [[AppsFlyerAttribution shared] handleOpenUrl:url options:options];
+
+  return [RCTLinkingManager application:app openURL:url options:options];
+}
+
+// Open Universal Links
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler {
+    [[AppsFlyerAttribution shared] continueUserActivity:userActivity restorationHandler:restorationHandler];
+    return YES;
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
@@ -44,11 +55,11 @@
 
 - (NSURL *)bundleURL
 {
-#if DEBUG
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
-#else
-  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-#endif
+  #if DEBUG
+    return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
+  #else
+    return [StallionModule getBundleURL];
+  #endif
 }
 
 @end

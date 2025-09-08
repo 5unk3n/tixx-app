@@ -1,8 +1,7 @@
 import { QueryErrorResetBoundary } from '@tanstack/react-query'
 import React, { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { StyleSheet, View } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import { View } from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
 
 import ErrorFallback from '@/components/error/ErrorFallback'
@@ -15,12 +14,7 @@ export default function SentTicketsScreen() {
 				{({ reset }) => (
 					<ErrorBoundary FallbackComponent={ErrorFallback} onReset={reset}>
 						<Suspense fallback={<ActivityIndicator className="flex-1" />}>
-							<ScrollView
-								className="gap-3"
-								contentContainerStyle={styles.container}
-							>
-								<TransferredTickets type={'sent'} />
-							</ScrollView>
+							<TransferredTickets type={'sent'} />
 						</Suspense>
 					</ErrorBoundary>
 				)}
@@ -28,10 +22,3 @@ export default function SentTicketsScreen() {
 		</View>
 	)
 }
-
-const styles = StyleSheet.create({
-	container: {
-		minHeight: '100%',
-		paddingBottom: 16
-	}
-})

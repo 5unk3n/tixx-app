@@ -1,12 +1,9 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import { Dialog, Portal } from 'react-native-paper'
+import { useTranslation } from 'react-i18next'
 
-import { UI } from '@/constants/ui'
 import { useAuth } from '@/hooks/useAuth'
-import { useCustomTheme } from '@/hooks/useCustomTheme'
 
-import { CustomText } from '../ui/display/CustomText'
+import CustomDialog from '../ui/feedback/CustomDialog'
 import CustomButton from '../ui/input/CustomButton'
 
 interface LogoutDialogProps {
@@ -18,41 +15,25 @@ export default function LogoutDialog({
 	visible,
 	onDismiss
 }: LogoutDialogProps) {
-	const { colors } = useCustomTheme()
+	const { t } = useTranslation()
 	const { logout } = useAuth()
 
 	return (
-		<Portal>
-			<Dialog
-				visible={visible}
-				onDismiss={onDismiss}
-				style={[style.dialog, { backgroundColor: colors.grayscale[1] }]}
-			>
-				<CustomText variant="headline1Medium" style={style.text}>
-					{UI.AUTH.LOGOUT_CONFIRM}
-				</CustomText>
-				<View className="flex-row gap-[10]">
-					<CustomButton flex onPress={logout} colorVariant="secondary">
-						{UI.COMMON.CONFIRM}
-					</CustomButton>
-					<CustomButton flex onPress={onDismiss}>
-						{UI.COMMON.CANCEL}
-					</CustomButton>
-				</View>
-			</Dialog>
-		</Portal>
+		<CustomDialog visible={visible} onDismiss={onDismiss}>
+			<CustomDialog.Title>{t('auth.confirmLogout')}</CustomDialog.Title>
+			<CustomDialog.Actions>
+				<CustomButton
+					flex
+					onPress={logout}
+					colorVariant="secondary"
+					mode="contained"
+				>
+					{t('common.confirm')}
+				</CustomButton>
+				<CustomButton flex onPress={onDismiss} mode="contained">
+					{t('common.cancel')}
+				</CustomButton>
+			</CustomDialog.Actions>
+		</CustomDialog>
 	)
 }
-
-const style = StyleSheet.create({
-	dialog: {
-		marginHorizontal: 20,
-		padding: 12,
-		borderRadius: 12
-	},
-	text: {
-		marginTop: 42,
-		marginBottom: 54,
-		textAlign: 'center'
-	}
-})

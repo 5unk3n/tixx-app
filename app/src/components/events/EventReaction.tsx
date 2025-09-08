@@ -1,13 +1,14 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 import { TouchableRipple } from 'react-native-paper'
 
-import { UI } from '@/constants/ui'
+import Neutral from '@/assets/illustrations/neutral.svg'
+import Smile from '@/assets/illustrations/smile.svg'
 import { useReactions } from '@/hooks/queries/events/useReactions'
 import { useUpdateReactions } from '@/hooks/queries/events/useUpdateReactions'
 import { useCustomTheme } from '@/hooks/useCustomTheme'
 
-import CustomIcon from '../ui/display/CustomIcon'
 import { CustomText } from '../ui/display/CustomText'
 import GradientBorderView from '../ui/display/GradientBorderView'
 
@@ -16,6 +17,7 @@ interface EventReactionProps {
 }
 
 export default function EventReaction({ eventId }: EventReactionProps) {
+	const { t } = useTranslation()
 	const { colors } = useCustomTheme()
 	const { data: reactions, isPending, isError } = useReactions(eventId)
 	const { mutateAsync: updateEventReaction } = useUpdateReactions()
@@ -32,11 +34,14 @@ export default function EventReaction({ eventId }: EventReactionProps) {
 
 	return (
 		<View>
-			<CustomText variant="headline1Semibold" className="text-grayscale-8 mb-2">
-				{UI.EVENTS.REACTION_TITLE}
+			<CustomText
+				variant="headline1Semibold"
+				className="text-grayscale-100 mb-2"
+			>
+				{t('events.reaction.title')}
 			</CustomText>
-			<CustomText variant="body3Regular" className="text-grayscale-5 mb-6">
-				{UI.EVENTS.REACTION_DESCRIPTION}
+			<CustomText variant="body3Regular" className="text-grayscale-400 mb-6">
+				{t('events.reaction.description')}
 			</CustomText>
 			<View className="flex-row gap-[10]">
 				<TouchableRipple
@@ -49,8 +54,8 @@ export default function EventReaction({ eventId }: EventReactionProps) {
 						borderWidth={1}
 						colors={
 							reactions.userReaction === 1
-								? [colors.point[3], colors.grayscale[8]]
-								: [colors.grayscale[2], colors.grayscale[2]]
+								? [colors.point[500], colors.grayscale[100]]
+								: [colors.grayscale[700], colors.grayscale[700]]
 						}
 						start={{ x: 0, y: 0 }}
 						end={{ x: 1, y: 1 }}
@@ -59,18 +64,18 @@ export default function EventReaction({ eventId }: EventReactionProps) {
 							pointerEvents="none"
 							className={`py-3 items-center ${
 								reactions.userReaction === 1
-									? 'bg-point-5a12'
-									: 'bg-grayscale-1'
+									? 'bg-point-500/12'
+									: 'bg-grayscale-800'
 							}`}
 						>
-							<CustomIcon name="smile" size={36} className="mb-2" />
+							<Smile width={36} height={36} />
 							<CustomText
 								variant="body2Medium"
-								className="text-grayscale-5 mb-1"
+								className="text-grayscale-400 mt-2 mb-1"
 							>
-								{UI.EVENTS.LIKE}
+								{t('events.reaction.like')}
 							</CustomText>
-							<CustomText variant="body3Regular" className="text-point-3">
+							<CustomText variant="body3Regular" className="text-point-500">
 								{`${reactions.reactions[1] || 0}표`}
 							</CustomText>
 						</View>
@@ -86,8 +91,8 @@ export default function EventReaction({ eventId }: EventReactionProps) {
 						borderWidth={1}
 						colors={
 							reactions.userReaction === 0
-								? [colors.point[3], colors.grayscale[8]]
-								: [colors.grayscale[2], colors.grayscale[2]]
+								? [colors.point[500], colors.grayscale[100]]
+								: [colors.grayscale[700], colors.grayscale[700]]
 						}
 						start={{ x: 0, y: 0 }}
 						end={{ x: 1, y: 1 }}
@@ -96,18 +101,18 @@ export default function EventReaction({ eventId }: EventReactionProps) {
 							pointerEvents="none"
 							className={`py-3 items-center ${
 								reactions.userReaction === 0
-									? 'bg-point-5a12'
-									: 'bg-grayscale-1'
+									? 'bg-point-500/12'
+									: 'bg-grayscale-800'
 							}`}
 						>
-							<CustomIcon name="neutral" size={36} className="mb-2" />
+							<Neutral width={36} height={36} />
 							<CustomText
 								variant="body2Medium"
-								className="text-grayscale-5 mb-1"
+								className="text-grayscale-400 mt-2 mb-1"
 							>
-								{UI.EVENTS.DISLIKE}
+								{t('events.reaction.dislike')}
 							</CustomText>
-							<CustomText variant="body3Regular" className="text-point-3">
+							<CustomText variant="body3Regular" className="text-point-500">
 								{`${reactions.reactions[0] || 0}표`}
 							</CustomText>
 						</View>

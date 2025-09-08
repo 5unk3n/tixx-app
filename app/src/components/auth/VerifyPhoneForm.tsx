@@ -1,39 +1,58 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { isAxiosError } from 'axios'
+import { differenceInSeconds } from 'date-fns'
+import {
+	parsePhoneNumberWithError,
+	AsYouType,
+	CountryCode,
+	getExampleNumber,
+	ParseError
+} from 'libphonenumber-js'
+import examples from 'libphonenumber-js/mobile/examples'
 import React, { useRef, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { Keyboard, Platform, View } from 'react-native'
+import { CountryItem, CountryList } from 'react-native-country-codes-picker'
 import { TouchableRipple } from 'react-native-paper'
 import Toast from 'react-native-toast-message'
 
-import { UI } from '@/constants/ui'
 import { useCheckPhoneNumber } from '@/hooks/queries/users/useCheckPhoneNumber'
+import { useCustomTheme } from '@/hooks/useCustomTheme'
 import { usePhoneVerification } from '@/hooks/usePhoneVerification'
 import { PhonAuthRequestInput, PhonAuthVerifyInput } from '@/types'
-import { formatPhone, normalizePhone } from '@/utils/formatters'
 import {
 	PhonAuthRequestInputSchema,
 	PhonAuthVerifyInputSchema
 } from '@/utils/schemas'
 
+import BulletText from '../ui/display/BulletText'
 import CustomIcon from '../ui/display/CustomIcon'
 import { CustomText } from '../ui/display/CustomText'
 import CustomBottomSheet, {
 	BottomSheetRef
 } from '../ui/feedback/CustomBottomSheet'
 import CustomButton from '../ui/input/CustomButton'
-import { CustomRadioButton } from '../ui/input/CustomRadioButton'
 import CustomTextInput from '../ui/input/CustomTextInput'
 
 interface VerifyPhoneFormProps {
-	onSubmit: (phone: string) => void
+	onSubmit: (phone: string, verified: number) => void
 }
 
 export default function VerifyPhoneForm({ onSubmit }: VerifyPhoneFormProps) {
-	const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
+	const { t } = useTranslation()
+	const { colors } = useCustomTheme()
 	const bottomSheetRef = useRef<BottomSheetRef>(null)
-	const { mutateAsync: checkPhoneNumber } = useCheckPhoneNumber()
-	// HACK: 폼 에러로 바꾸기
+	const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false)
 	const [phoneError, setPhoneError] = useState(false)
+	const [searchValue, setSearchValue] = useState('')
+	const [canSmsService, setCanSmsService] = useState(true)
+	const [country, setCountry] = useState<Partial<CountryItem>>({
+		code: 'KR',
+		dial_code: '+82'
+	})
+	const asYouType = new AsYouType(country.code as CountryCode)
+	let keyPress = ''
 
 	const phoneForm = useForm<PhonAuthRequestInput>({
 		resolver: zodResolver(PhonAuthRequestInputSchema.omit({ hash: true }))
@@ -47,45 +66,85 @@ export default function VerifyPhoneForm({ onSubmit }: VerifyPhoneFormProps) {
 		codeForm.setValue('authCode', authCode, { shouldValidate: true })
 	}
 
-	const { requestCode, verifyCode, remainingTime, isCodeSent } =
-		usePhoneVerification(handleAuthCodeReceived)
+	const { mutateAsync: checkPhoneNumber } = useCheckPhoneNumber()
+	const {
+		requestCode,
+		verifyCode,
+		remainingTime,
+		isCodeSent,
+		isResendDisabled,
+		firstReqTime,
+		reqCount
+	} = usePhoneVerification(handleAuthCodeReceived)
+	const canSkip =
+		(firstReqTime && differenceInSeconds(new Date(), firstReqTime) > 60) ||
+		reqCount >= 2
 
 	const handleRequestCode: SubmitHandler<PhonAuthRequestInput> = async ({
-		carrier,
 		phone
 	}) => {
 		Keyboard.dismiss()
-		const normalizedPhone = normalizePhone(phone)
 
-		const user = await checkPhoneNumber(normalizedPhone)
-		if (user) {
-			Toast.show({
-				type: 'error',
-				text1: '이미 가입된 전화번호입니다.'
-			})
-			setPhoneError(true)
-			return
+		try {
+			const e164Phone = parsePhoneNumberWithError(
+				country.dial_code + phone
+			).number
+
+			const user = await checkPhoneNumber(e164Phone)
+
+			if (user) {
+				Toast.show({
+					type: 'error',
+					text1: t('auth.errors.alreadyExistPhone')
+				})
+				setPhoneError(true)
+				return
+			}
+			await requestCode({ phone: e164Phone })
+		} catch (error) {
+			if (error instanceof ParseError) {
+				Toast.show({
+					type: 'error',
+					text1: t('auth.errors.invalidPhoneNumber')
+				})
+			} else if (isAxiosError(error) && error.status === 503) {
+				setCanSmsService(false)
+				Toast.show({
+					type: 'error',
+					text1: t('auth.errors.temporarilyUnavailablePhone')
+				})
+			} else {
+				Toast.show({ type: 'error', text1: t('common.errors.unknownError') })
+			}
 		}
-
-		await requestCode({ carrier, phone })
 	}
 
 	const handleVerifyCode: SubmitHandler<PhonAuthVerifyInput> = async ({
 		authCode
 	}) => {
-		const success = await verifyCode(phoneForm.getValues('phone'), authCode)
+		const e164Phone = parsePhoneNumberWithError(
+			country.dial_code + phoneForm.getValues('phone')
+		).number
+		const success = await verifyCode(e164Phone, authCode)
 		if (success) {
-			onSubmit(normalizePhone(phoneForm.getValues('phone')))
+			onSubmit(e164Phone, 0)
 		}
+	}
+
+	const handleSkip = () => {
+		const e164Phone = parsePhoneNumberWithError(
+			country.dial_code + phoneForm.getValues('phone')
+		).number
+		onSubmit(e164Phone, 1)
 	}
 
 	return (
 		<View className="flex-1">
 			<CustomText
-				className="text-grayscale-4 ml-2 mb-2"
+				className="text-grayscale-500 ml-2 mb-2"
 				variant="caption1Regular"
 			>
-				{UI.USERS.PHONE}
+				{t('profile.fields.phone')}
 			</CustomText>
 			<View className="flex-row items-center mb-4">
 				<TouchableRipple
@@ -97,12 +156,7 @@ export default function VerifyPhoneForm({ onSubmit }: VerifyPhoneFormProps) {
 					borderless={true}
 				>
 					<View className="w-28 h-12 pl-5 pr-2 flex-row items-center justify-between">
-						<CustomText
-							className={`${phoneForm.watch('carrier') || 'text-grayscale-3'}`}
-							variant="body1Medium"
-						>
-							{phoneForm.watch('carrier') || '통신사'}
-						</CustomText>
+						<CustomText variant="body1Medium">{country?.dial_code}</CustomText>
 						<CustomIcon
 							name="arrowDown"
 							size={20}
@@ -118,20 +172,31 @@ export default function VerifyPhoneForm({ onSubmit }: VerifyPhoneFormProps) {
 							<CustomTextInput
 								onBlur={onBlur}
 								onChangeText={(text) => {
-									onChange(text)
+									let formattedPhone = text
+									if (keyPress !== 'Backspace') {
+										asYouType.reset()
+										formattedPhone = asYouType.input(text).replaceAll('-', ' ')
+									}
+									onChange(formattedPhone)
 									setPhoneError(false)
 								}}
-								value={value && formatPhone(value)}
+								value={value}
+								onKeyPress={(e) => (keyPress = e.nativeEvent.key)}
 								keyboardType="phone-pad"
-								placeholder={formatPhone('01000000000')}
+								placeholder={getExampleNumber(
+									country.code as CountryCode,
+									examples
+								)
+									?.formatNational()
+									.replaceAll('-', ' ')}
 								right={
 									<CustomButton
 										mode="contained"
 										size="sm"
 										onPress={phoneForm.handleSubmit(handleRequestCode)}
-										disabled={phoneError}
+										disabled={phoneError || isResendDisabled}
 									>
-										{isCodeSent ? UI.COMMON.RESEND : UI.COMMON.SEND}
+										{isCodeSent ? t('common.resend') : t('common.send')}
 									</CustomButton>
 								}
 							/>
@@ -139,8 +204,8 @@ export default function VerifyPhoneForm({ onSubmit }: VerifyPhoneFormProps) {
 					/>
 				</View>
 			</View>
-			<View>
-				{isCodeSent && (
+			{isCodeSent && (
+				<View className="mb-4">
 					<Controller
 						control={codeForm.control}
 						name="authCode"
@@ -160,7 +225,7 @@ export default function VerifyPhoneForm({ onSubmit }: VerifyPhoneFormProps) {
 								textContentType={
 									Platform.OS === 'ios' ? 'oneTimeCode' : undefined
 								}
-								placeholder={UI.AUTH.CODE_PLACEHOLDER}
+								placeholder={t('auth.verification.codePlaceholder')}
 								right={
 									<CustomText
 										className="text-primary mr-3"
@@ -172,15 +237,24 @@ export default function VerifyPhoneForm({ onSubmit }: VerifyPhoneFormProps) {
 							/>
 						)}
 					/>
-				)}
+				</View>
+			)}
+			{(canSkip || !canSmsService) && (
+				<CustomButton onPress={handleSkip} className="mb-4">
+					{t('auth.verification.verifyLater')}
+				</CustomButton>
+			)}
+			<View className="bg-grayscale-800 px-5 py-3 rounded-lg">
+				<BulletText variant="body3RegularLarge" className="text-gray-400">
+					{t('coupon.notices.disableInternationalCall')}
+				</BulletText>
 			</View>
 			<CustomButton
-				mode="contained"
 				onPress={codeForm.handleSubmit(handleVerifyCode)}
 				disabled={!codeForm.watch('authCode')}
 				className="mt-auto"
 			>
-				{UI.COMMON.NEXT}
+				{t('common.next')}
 			</CustomButton>
 
 			<CustomBottomSheet
@@ -191,24 +265,35 @@ export default function VerifyPhoneForm({ onSubmit }: VerifyPhoneFormProps) {
 					setIsBottomSheetOpen(false)
 				}}
 			>
-				<CustomText variant="headline1Semibold" className="ml-7 mt-7 mb-6">
-					{UI.AUTH.SELECT_CARRIER}
-				</CustomText>
-				<CustomRadioButton.Group
-					onChange={(value: string) => {
-						phoneForm.setValue('carrier', value)
+				<View className="mt-7 mx-5 mb-4">
+					<CustomTextInput
+						containerStyle={{ backgroundColor: colors.grayscale[700] }}
+						onChangeText={setSearchValue}
+						placeholder="Search your country"
+					/>
+				</View>
+				<CountryList
+					lang={'en'}
+					pickerButtonOnPress={(item) => {
+						setCountry(item)
 						bottomSheetRef.current?.dismiss()
 						setIsBottomSheetOpen(false)
+						setSearchValue('')
 					}}
-					value={phoneForm.getValues().carrier}
-				>
-					<CustomRadioButton.Button label="KT" value="KT" />
-					<CustomRadioButton.Button label="SKT" value="SKT" />
-					<CustomRadioButton.Button label="LG" value="LG" />
-					<CustomRadioButton.Button label="KT알뜰폰" value="KT알뜰폰" />
-					<CustomRadioButton.Button label="SKT알뜰폰" value="SKT알뜰폰" />
-					<CustomRadioButton.Button label="LG알뜰폰" value="LG알뜰폰" />
-				</CustomRadioButton.Group>
+					searchValue={searchValue}
+					style={{
+						countryButtonStyles: {
+							backgroundColor: colors.grayscale[800],
+							borderRadius: 0
+						},
+						countryName: {
+							color: colors.onPrimary
+						},
+						dialCode: {
+							color: colors.onPrimary
+						}
+					}}
+				/>
 			</CustomBottomSheet>
 		</View>
 	)

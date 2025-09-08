@@ -1,5 +1,7 @@
+import * as Sentry from '@sentry/react-native'
 import React from 'react'
 import { FallbackProps } from 'react-error-boundary'
+import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet } from 'react-native'
 
 import { CustomText } from '../ui/display/CustomText'
@@ -15,23 +17,29 @@ interface ErrorFallbackProps extends FallbackProps {
 export default function ErrorFallback({
 	error,
 	resetErrorBoundary,
-	title = '오류가 발생했습니다.',
-	description = '잠시 후 다시 시도해주세요.',
-	buttonText = '다시 시도'
+	title,
+	description,
+	buttonText
 }: ErrorFallbackProps) {
+	const { t } = useTranslation()
+
+	if (!__DEV__) {
+		Sentry.captureException(error)
+	}
+
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
 			<CustomText variant="headline1Medium" className="text-center">
-				{title}
+				{title || t('common.errors.unknownError')}
 			</CustomText>
 			<CustomText
 				variant="body1Regular"
 				className="text-center mt-2 text-onSecondary"
 			>
-				{description}
+				{description || t('common.errors.tryAgainLater')}
 			</CustomText>
 			<CustomButton onPress={resetErrorBoundary} className="mt-6 ">
-				{buttonText}
+				{buttonText || t('common.retry')}
 			</CustomButton>
 			{__DEV__ && (
 				<CustomText variant="body3Regular" className="mt-4">

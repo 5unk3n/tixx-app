@@ -4,7 +4,9 @@ import {
 	TextInput,
 	StyleSheet,
 	View,
-	TextInputProps
+	TextInputProps,
+	StyleProp,
+	ViewStyle
 } from 'react-native'
 import { HelperText } from 'react-native-paper'
 
@@ -12,10 +14,11 @@ import { useCustomTheme } from '@/hooks/useCustomTheme'
 
 import { CustomText } from '../display/CustomText'
 
-interface CustomTextInputProps extends TextInputProps {
+export interface CustomTextInputProps extends TextInputProps {
 	className?: string
 	label?: string
-	style?: any
+	style?: StyleProp<ViewStyle>
+	containerStyle?: StyleProp<ViewStyle>
 	errorMessage?: string
 	disabled?: boolean
 	right?: JSX.Element
@@ -28,6 +31,7 @@ export default function CustomTextInput({
 	right,
 	disabled,
 	numberOfLines,
+	containerStyle,
 	...props
 }: CustomTextInputProps) {
 	const ref = useRef<TextInput>(null)
@@ -37,17 +41,25 @@ export default function CustomTextInput({
 		<View style={style}>
 			{label && (
 				<Pressable className="pl-2 pb-2" onPress={() => ref.current?.focus()}>
-					<CustomText variant="caption1Regular" className="text-grayscale-4">
+					<CustomText variant="caption1Regular" className="text-grayscale-500">
 						{label}
 					</CustomText>
 				</Pressable>
 			)}
 			<View
-				className={`${numberOfLines ? 'h-full' : 'h-12'} flex-row bg-surfaceVariant rounded-lg`}
+				style={[
+					styles.container,
+					{ backgroundColor: colors.surfaceVariant },
+					numberOfLines
+						? styles.containerFullHeight
+						: styles.containerDefaultHeight,
+					containerStyle
+				]}
 			>
 				<TextInput
-					className={`flex-1 px-5 font-medium text-base leading-md tracking-tight ${disabled ? 'text-grayscale-5' : 'text-onPrimary'} ${numberOfLines ? 'py-4' : 'py-2'}`}
-					placeholderTextColor={colors.grayscale[3]}
+					ref={ref}
+					className={`flex-1 px-5 font-medium text-base leading-md tracking-tight ${disabled ? 'text-grayscale-400' : 'text-onPrimary'} ${numberOfLines ? 'py-4' : 'py-2'}`}
+					placeholderTextColor={colors.grayscale[600]}
 					editable={!disabled}
 					numberOfLines={numberOfLines}
 					{...props}
@@ -77,5 +89,15 @@ const styles = StyleSheet.create({
 		paddingVertical: 0,
 		right: 0,
 		bottom: -27
+	},
+	container: {
+		flexDirection: 'row',
+		borderRadius: 8
+	},
+	containerDefaultHeight: {
+		height: 48
+	},
+	containerFullHeight: {
+		height: '100%'
 	}
 })

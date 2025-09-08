@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 
 import EmptyTickets from '@/components/tickets/EmptyTickets'
 import TicketListItem from '@/components/tickets/TicketListItem'
 import Tabs from '@/components/ui/navigation/Tabs'
-import { UI } from '@/constants/ui'
 import { useEventTickets } from '@/hooks/queries/eventTickets/useEventTickets'
 import { EventTicketStatus } from '@/types'
-import { formatTicketDate } from '@/utils/formatters'
+import { formatDateWithDay } from '@/utils/formatters'
 
 const tabMap: Record<string, EventTicketStatus[]> = {
 	available: ['available'],
@@ -19,16 +19,17 @@ export default function MyTicketsScreen() {
 	const [activeTab, setActiveTab] = useState<
 		'available' | 'used' | 'expiredOrCancelled'
 	>('available')
+	const { t, i18n } = useTranslation()
 	const { data: groupedEventTickets } = useEventTickets(tabMap[activeTab])
 
 	return (
 		<View className="flex-1 pt-3 px-5">
-			<Tabs value={activeTab} onChange={setActiveTab} type="filled">
-				<Tabs.Tab value="available" label={UI.TICKETS.AVAILABLE_TAB} />
-				<Tabs.Tab value="used" label={UI.TICKETS.USED_TAB} />
+			<Tabs value={activeTab} onChange={setActiveTab} type="outline">
+				<Tabs.Tab value="available" label={t('tickets.tabs.available')} />
+				<Tabs.Tab value="used" label={t('tickets.tabs.used')} />
 				<Tabs.Tab
 					value="expiredOrCancelled"
-					label={UI.TICKETS.EXPIRED_OR_CANCELED_TAB}
+					label={t('tickets.tabs.expiredOrCanceled')}
 				/>
 			</Tabs>
 			<ScrollView
@@ -42,11 +43,11 @@ export default function MyTicketsScreen() {
 							eventTicket={eventTicket}
 							statusText={
 								eventTicket.status === 'used'
-									? `${formatTicketDate(eventTicket.usedAt as string)} ${UI.TICKETS.USED_STATUS}`
+									? `${formatDateWithDay(eventTicket.usedAt!, i18n.language)} ${t('tickets.status.used')}`
 									: eventTicket.status === 'expired'
-										? UI.TICKETS.EXPIRED_STATUS
+										? t('tickets.status.expired')
 										: eventTicket.status === 'cancelled'
-											? UI.TICKETS.CANCELED_STATUS
+											? t('tickets.status.canceled')
 											: ''
 							}
 						/>

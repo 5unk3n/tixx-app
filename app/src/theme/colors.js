@@ -1,29 +1,33 @@
 const grayscale = {
-	b: '#121212',
-	1: '#1B1B1B',
-	2: '#2F2F30',
-	3: '#585858',
-	4: '#7E7D7D',
-	5: '#A0A2A2',
-	6: '#C1C1C2',
-	7: '#DCDCDC',
-	8: '#EDEDED',
-	w: '#FFFFFF'
+	0: '#FFFFFF',
+	100: '#EDEDED',
+	200: '#DCDCDC',
+	300: '#C1C1C2',
+	400: '#A0A2A2',
+	500: '#7E7D7D',
+	600: '#585858',
+	700: '#2F2F30',
+	800: '#1B1B1B',
+	900: '#000000'
 }
 
 const point = {
-	1: '#88012C',
-	2: '#BB013C',
-	3: '#FF0859',
-	4: '#FE709D',
-	5: '#FFBCD0',
-	'5a12': 'rgba(255, 188, 208, 0.12)'
+	100: '#FEFFF4',
+	200: '#FCFDDC',
+	300: '#FAFCC4',
+	400: '#F6FA93',
+	500: '#F2F862',
+	600: '#EEF631',
+	700: '#E1EA0A',
+	800: '#C9D109',
+	900: '#B2B908'
 }
 
 const brandColors = {
 	naver: '#03C75A',
 	kakao: '#FEE500',
-	apple: '#FFFFFF'
+	apple: '#FFFFFF',
+	google: '#FFFFFF'
 }
 
 const colors = {
@@ -33,23 +37,25 @@ const colors = {
 }
 
 const customMd3DarkColors = {
-	primary: point[3],
-	onPrimary: grayscale.w,
+	primary: point[500],
+	onPrimary: grayscale[0],
 
-	secondary: grayscale[2],
-	onSecondary: grayscale[5],
+	secondary: grayscale[700],
+	onSecondary: grayscale[400],
 
-	background: grayscale.b,
-	onBackground: grayscale.w,
+	background: grayscale[900],
+	onBackground: grayscale[0],
 
-	surface: grayscale.b,
-	onSurface: grayscale.w,
-	surfaceVariant: grayscale[1],
-	onSurfaceVariant: grayscale[8],
-	surfaceDisabled: grayscale[2],
-	onSurfaceDisabled: grayscale[5],
+	backdrop: grayscale[900] + '99',
 
-	error: point[3]
+	surface: grayscale[900],
+	onSurface: grayscale[0],
+	surfaceVariant: grayscale[800],
+	onSurfaceVariant: grayscale[100],
+	surfaceDisabled: grayscale[700],
+	onSurfaceDisabled: grayscale[400],
+
+	error: point[500]
 }
 
 const semanticColors = {

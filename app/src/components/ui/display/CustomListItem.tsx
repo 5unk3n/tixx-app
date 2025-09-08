@@ -4,16 +4,20 @@ import { List, ListItemProps } from 'react-native-paper'
 
 import { useCustomTheme } from '@/hooks/useCustomTheme'
 
-interface CustomListItemProps extends ListItemProps {}
+interface CustomListItemProps extends ListItemProps {
+	rightElement?: React.ReactNode
+}
 
 export default function CustomListItem({
 	style,
 	titleStyle,
 	contentStyle,
 	descriptionStyle,
+	rightElement,
 	...props
 }: CustomListItemProps) {
 	const { colors, fonts } = useCustomTheme()
+	const rightProp = rightElement ? () => rightElement : props.right
 
 	return (
 		<List.Item
@@ -23,10 +27,12 @@ export default function CustomListItem({
 			titleStyle={[fonts.body1Medium, titleStyle]}
 			descriptionStyle={[
 				fonts.caption1Regular,
-				{ color: colors.grayscale[5] },
+				{ color: colors.grayscale[400] },
 				styles.description,
 				descriptionStyle
 			]}
+			titleNumberOfLines={2}
+			right={rightProp}
 		/>
 	)
 }

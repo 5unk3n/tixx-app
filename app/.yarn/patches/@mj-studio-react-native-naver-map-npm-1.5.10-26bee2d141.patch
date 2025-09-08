@@ -1,0 +1,22 @@
+diff --git a/android/gradle.properties b/android/gradle.properties
+index 29a238e8e30a5df165b378cef6e473fe7b28966b..7f0c5d2e1fabdc48ae3e6929e9771460d856a158 100644
+--- a/android/gradle.properties
++++ b/android/gradle.properties
+@@ -3,5 +3,5 @@ NaverMap_minSdkVersion=21
+ NaverMap_targetSdkVersion=31
+ NaverMap_compileSdkVersion=31
+ NaverMap_ndkversion=21.4.7075529
+-NaverMap_sdkVersion=3.18.0
++NaverMap_sdkVersion=3.21.0
+ NaverMap_locationServiceVersion=21.2.0
+diff --git a/mj-studio-react-native-naver-map.podspec b/mj-studio-react-native-naver-map.podspec
+index 4d1cead275ba19796c474249980b5d3edde075a7..6425a6b45754b34f3e6305c013e16f901caeb967 100644
+--- a/mj-studio-react-native-naver-map.podspec
++++ b/mj-studio-react-native-naver-map.podspec
+@@ -40,5 +40,5 @@ Pod::Spec.new do |s|
+    end
+   end
+ 
+-  s.dependency "NMapsMap", "3.18.0"
++  s.dependency "NMapsMap", "3.21.0"
+ end

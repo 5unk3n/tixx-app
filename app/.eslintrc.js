@@ -34,6 +34,14 @@ module.exports = {
 					caseInsensitive: true
 				}
 			}
+		],
+		'@typescript-eslint/no-unused-vars': [
+			'error',
+			{
+				argsIgnorePattern: '^_',
+				varsIgnorePattern: '^_',
+				caughtErrorsIgnorePattern: '^_'
+			}
 		]
 	}
 }

@@ -7,18 +7,18 @@ import React, {
 	useState
 } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { View, FlatList, TextInput, ScrollView } from 'react-native'
-import { Contact } from 'react-native-contacts/type'
+import { useTranslation } from 'react-i18next'
+import { View, FlatList, ScrollView, StyleSheet } from 'react-native'
 import Toast from 'react-native-toast-message'
 
 import CustomIcon from '@/components/ui/display/CustomIcon'
 import { CustomText } from '@/components/ui/display/CustomText'
-import GradientBorderView from '@/components/ui/display/GradientBorderView'
+import CustomDialog from '@/components/ui/feedback/CustomDialog'
 import CustomButton from '@/components/ui/input/CustomButton'
 import CustomIconButton from '@/components/ui/input/CustomIconButton'
-import { UI } from '@/constants/ui'
+import CustomTextInput from '@/components/ui/input/CustomTextInput'
 import { useTransferEventTickets } from '@/hooks/queries/eventTickets/useTransferEventTickets'
-import { useContacts } from '@/hooks/useContacts'
+import { ContactWithUserInfo, useContacts } from '@/hooks/useContacts'
 import { useCustomTheme } from '@/hooks/useCustomTheme'
 import { MainStackParamList } from '@/types/navigation'
 import { formatPhone } from '@/utils/formatters'
@@ -26,12 +26,15 @@ import { formatPhone } from '@/utils/formatters'
 type Props = NativeStackScreenProps<MainStackParamList, 'TicketShare'>
 
 export default function TicketShareScreen({ route, navigation }: Props) {
-	const eventTicketIds = route.params
-	const { colors, fonts } = useCustomTheme()
-	const [selectedContacts, setSelectedContacts] = useState<Contact[]>([])
+	const { ids, event } = route.params
+	const { t } = useTranslation()
+	const { colors } = useCustomTheme()
+	const [selectedContacts, setSelectedContacts] = useState<
+		ContactWithUserInfo[]
+	>([])
 	const { contacts, loadContacts, hasPermission } = useContacts()
-	const { mutateAsync: transferEventTickets } = useTransferEventTickets()
 	const [searchQuery, setSearchQuery] = useState('')
+	const [isOpen, setIsOpen] = useState(false)
 
 	const searchedContacts = useMemo(
 		() =>
@@ -41,36 +44,41 @@ export default function TicketShareScreen({ route, navigation }: Props) {
 		[contacts, searchQuery]
 	)
 
+	const { mutateAsync: transferEventTickets } = useTransferEventTickets()
+
 	const handleShare = async () => {
 		await transferEventTickets(
 			selectedContacts.map((contact, index) => ({
-				eventTicketId: eventTicketIds[index],
-				toPhoneNumber: contact.id ? '' : contact.phoneNumbers[0].number,
-				toUserId: contact.id
+				eventTicketId: ids[index],
+				toPhoneNumber: contact.phoneNumber,
+				toUserId: contact.userId || undefined
 			}))
 		)
 		navigation.reset({
 			index: 1,
-			routes: [{ name: 'MainTab' }, { name: 'TransferCompletion' }]
+			routes: [
+				{ name: 'MainTab' },
+				{ name: 'TransferCompletion', params: event }
+			]
 		})
 	}
 
 	const handleContactSelect = (
-		contact: Contact,
-		setSelected: Dispatch<SetStateAction<Contact[]>>,
+		contact: ContactWithUserInfo,
+		setSelected: Dispatch<SetStateAction<ContactWithUserInfo[]>>,
 		isSelected: boolean
 	) => {
 		if (isSelected) {
 			setSelected((prev) =>
-				prev.filter(
-					(selectedContact) => selectedContact.recordID !== contact.recordID
-				)
+				prev.filter((selectedContact) => selectedContact.id !== contact.id)
 			)
 		} else {
-			if (selectedContacts.length >= eventTicketIds.length) {
+			if (selectedContacts.length >= ids.length) {
 				Toast.show({
 					type: 'error',
-					text1: `최대 ${eventTicketIds.length}명까지 선택할 수 있습니다.`
+					text1: t('tickets.errors.maxSelection', {
+						count: ids.length
+					})
 				})
 			} else {
 				setSelectedContacts((prev) => [...prev, contact])
@@ -83,45 +91,56 @@ export default function TicketShareScreen({ route, navigation }: Props) {
 	}, [loadContacts])
 
 	return (
-		<ErrorBoundary fallback={<View className="flex-1 bg-red-200" />}>
+		<ErrorBoundary fallback={<View className="flex-1" />}>
 			<View className="flex-1 pt-2 px-5">
-				<CustomText variant="body3Regular" className="mb-[10] text-grayscale-5">
-					{/* FIXME: 아래 마진 추가 */}
-					{`${UI.TICKETS.SHARABLE_TICKETS} ${selectedContacts.length}/${eventTicketIds.length}`}
-				</CustomText>
-				<ScrollView horizontal className="gap-[10] grow-0">
+				<CustomTextInput
+					placeholder={t('tickets.search.contactPlaceholder')}
+					right={<CustomIcon name="search" color={colors.primary} />}
+					containerStyle={[
+						styles.textInputContainer,
+						{ borderColor: colors.primary, backgroundColor: colors.background }
+					]}
+					placeholderTextColor={colors.grayscale[400]}
+					value={searchQuery}
+					onChangeText={setSearchQuery}
+				/>
+				{/* 이전 디자인 */}
+				{/* <CustomText
+					variant="body3Regular"
+					className="mb-[10] text-grayscale-400"
+				>
+					{`${t('tickets.sharableTickets')} ${selectedContacts.length}/${ids.length}`}
+				</CustomText> */}
+				<ScrollView
+					horizontal
+					className="grow-0"
+					contentContainerStyle={styles.contentContainer}
+				>
 					{selectedContacts.map((selectedContact) => (
-						<GradientBorderView
-							key={selectedContact.recordID}
-							borderRadius={8}
-							borderWidth={1}
-							colors={[colors.point[3], colors.grayscale[8]]}
-							start={{ x: 0, y: 0 }}
-							end={{ x: 1, y: 1 }}
-							className="w-[170] h-[85] mb-3"
+						<View
+							key={selectedContact.id}
+							className="p-2 border border-primary rounded-lg flex-row items-center mb-6"
 						>
-							<View className="w-full h-full bg-point-5a12 p-4">
-								<CustomText variant="body1Medium" className="text-grayscale-8">
-									{`To. ${selectedContact.displayName}님`}
-								</CustomText>
-							</View>
-						</GradientBorderView>
+							<CustomText variant="body1Regular" className="text-white">
+								{t('tickets.to', { nickname: selectedContact.displayName })}
+							</CustomText>
+							<CustomIcon
+								size={22}
+								name="close"
+								strokeWidth={2}
+								className="ml-1"
+								onPress={() => {
+									setSelectedContacts((prev) =>
+										prev.filter((contact) => contact.id !== selectedContact.id)
+									)
+								}}
+							/>
+						</View>
 					))}
 				</ScrollView>
-				<View className="flex-row mb-6 bg-surfaceVariant rounded-lg items-center py-[14] pl-3 pr-5">
-					<CustomIcon name="search" />
-					<TextInput
-						placeholder={UI.TICKETS.SEARCH_CONTACT_PLACEHOLDER}
-						placeholderTextColor={colors.grayscale[5]}
-						style={fonts.body1Medium}
-						className="flex-1 m-0 py-0 pl-3 text-onPrimary"
-						value={searchQuery}
-						onChangeText={(text) => setSearchQuery(text)}
-					/>
-				</View>
 				{searchedContacts.length ? (
 					<FlatList
-						keyExtractor={(item) => item.recordID}
+						keyExtractor={(item) => item.id}
 						className="flex-1"
 						data={searchedContacts}
 						showsVerticalScrollIndicator={false}
@@ -144,14 +163,14 @@ export default function TicketShareScreen({ route, navigation }: Props) {
 										</View>
 										<CustomText
 											variant="body3Regular"
-											className="text-grayscale-5"
+											className="text-grayscale-400"
 										>
-											{formatPhone(item.phoneNumbers[0].number)}
+											{formatPhone(item.phoneNumber)}
 										</CustomText>
 									</View>
 									<CustomIconButton
 										name={selectedContacts.includes(item) ? 'close' : 'plus'}
-										className={isSelected ? 'bg-grayscale-2' : 'bg-primary'}
+										className={isSelected ? 'bg-grayscale-700' : 'bg-primary'}
 										onPress={() =>
 											handleContactSelect(item, setSelectedContacts, isSelected)
 										}
@@ -164,23 +183,57 @@ export default function TicketShareScreen({ route, navigation }: Props) {
 					/>
 				) : (
 					<View className="flex-1 items-center justify-center">
-						<CustomText variant="body2Medium" className="text-grayscale-5">
+						<CustomText variant="body2Medium" className="text-grayscale-400">
 							{hasPermission
-								? UI.TICKETS.NO_SEARCH_RESULT
-								: UI.COMMON.CONTACT_PERMISSION_REQUIRED}
+								? t('tickets.search.noResult')
+								: t('common.permissions.contactRequired')}
 						</CustomText>
 					</View>
 				)}
-				<View className="bottom-0 flex-row gap-3">
+				<View className="bottom-2 flex-row gap-3">
 					<CustomButton
 						flex
-						onPress={handleShare}
+						onPress={() => setIsOpen(true)}
 						disabled={selectedContacts.length === 0}
 					>
-						{UI.COMMON.SHARE_ACTION}
+						{t('common.actions.gift')}
 					</CustomButton>
 				</View>
 			</View>
+			<CustomDialog visible={isOpen} onDismiss={() => setIsOpen(false)}>
+				<CustomDialog.Title>
+					{t('tickets.confirmGift.title')}
+				</CustomDialog.Title>
+				<CustomDialog.Actions>
+					<CustomButton
+						onPress={() => setIsOpen(false)}
+						mode="contained"
+						colorVariant="secondary"
+						flex
+					>
+						{t('common.actions.cancel')}
+					</CustomButton>
+					<CustomButton
+						onPress={handleShare}
+						mode="contained"
+						colorVariant="primary"
+						flex
+					>
+						{t('common.actions.gift')}
+					</CustomButton>
+				</CustomDialog.Actions>
+			</CustomDialog>
 		</ErrorBoundary>
 	)
 }
+
+const styles = StyleSheet.create({
+	textInputContainer: {
+		borderWidth: 1,
+		borderRadius: 25,
+		marginBottom: 16
+	},
+	contentContainer: {
+		gap: 16
+	}
+})

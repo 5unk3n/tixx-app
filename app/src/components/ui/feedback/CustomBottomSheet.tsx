@@ -6,7 +6,7 @@ import {
 } from '@gorhom/bottom-sheet'
 import { styled } from 'nativewind'
 import React, { forwardRef, useImperativeHandle, useRef } from 'react'
-import { Keyboard, ViewStyle } from 'react-native'
+import { Keyboard, StyleSheet, ViewStyle } from 'react-native'
 
 import { useCustomTheme } from '@/hooks/useCustomTheme'
 
@@ -17,7 +17,9 @@ interface CustomBottomSheetProps {
 	onDismiss?: () => void
 	onBackDropPress?: () => void
 	isDraggable?: boolean
+	enablePanDownToClose?: boolean
 	style?: ViewStyle
+	backgroundStyle?: ViewStyle
 }
 
 export interface BottomSheetRef {
@@ -34,7 +36,9 @@ const CustomBottomSheet = forwardRef<BottomSheetRef, CustomBottomSheetProps>(
 			children,
 			onDismiss,
 			isDraggable = true,
-			style
+			enablePanDownToClose = true,
+			style,
+			backgroundStyle
 		},
 		ref
 	) => {
@@ -66,18 +70,32 @@ const CustomBottomSheet = forwardRef<BottomSheetRef, CustomBottomSheetProps>(
 				onChange={onChange}
 				snapPoints={snapPoints}
 				backdropComponent={renderBackdrop}
-				enablePanDownToClose={isDraggable ? true : false}
+				enablePanDownToClose={enablePanDownToClose}
 				enableHandlePanningGesture={isDraggable ? true : false}
 				enableContentPanningGesture={isDraggable ? true : false}
 				handleComponent={isDraggable ? undefined : null}
-				handleIndicatorStyle={{ backgroundColor: colors.onSurfaceVariant }}
+				handleIndicatorStyle={[
+					{
+						backgroundColor: colors.grayscale[200]
+					},
+					styles.handleIndicator
+				]}
 				onDismiss={onDismiss}
-				backgroundStyle={{ backgroundColor: colors.surfaceVariant }}
+				backgroundStyle={[
+					{ backgroundColor: colors.background },
+					backgroundStyle
+				]}
 			>
 				<BottomSheetView style={style}>{children}</BottomSheetView>
 			</BottomSheetModal>
 		)
 	}
 )
+
+const styles = StyleSheet.create({
+	handleIndicator: {
+		width: 40
+	}
+})
 
 export default styled(CustomBottomSheet)

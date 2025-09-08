@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 
-import { updateUser } from '@/apis/auth/updateUser'
+import { updateUser } from '@/apis/users/updateUser'
 import { UserUpdateInput } from '@/types'
 import { queryClient } from '@/utils/queryClient'
 

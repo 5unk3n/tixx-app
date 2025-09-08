@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
+import { useTranslation } from 'react-i18next'
 import Toast from 'react-native-toast-message'
 
 import { actionEventTicketTransfer } from '@/apis/eventTickets/actionEventTicketTransfer'
@@ -7,6 +8,8 @@ import { EventTicketsActionPayload } from '@/types'
 import { queryClient } from '@/utils/queryClient'
 
 export const useActionEventTicketTransfer = () => {
+	const { t } = useTranslation()
+
 	return useMutation({
 		mutationFn: ({
 			data,
@@ -24,17 +27,17 @@ export const useActionEventTicketTransfer = () => {
 				if (error.response?.status === 403) {
 					Toast.show({
 						type: 'error',
-						text1: '요청 권한이 없습니다.'
+						text1: t('common.errors.permissionDenied')
 					})
 				} else if (error.response?.status === 404) {
 					Toast.show({
 						type: 'error',
-						text1: '존재하지 않거나 이미 처리된 요청입니다.'
+						text1: t('common.errors.requestNotFound')
 					})
 				} else {
 					Toast.show({
 						type: 'error',
-						text1: '요청 처리에 실패했습니다.'
+						text1: t('common.errors.requestFailed')
 					})
 				}
 			}

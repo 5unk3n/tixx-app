@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import CustomHeader from '@/components/ui/navigation/CustomHeader'
-import { NAVIGATION } from '@/constants/navigation'
+import { CheckProfileHeader } from '@/components/ui/navigation/StackHeader'
 import AgreementScreen from '@/screens/auth/AgreementScreen'
 import CheckProfileScreen from '@/screens/auth/CheckProfileScreen'
 import LoginScreen from '@/screens/auth/LoginScreen'
@@ -12,6 +12,8 @@ import { AuthStackParamList } from '@/types/navigation'
 const AuthStack = createNativeStackNavigator<AuthStackParamList>()
 
 export default function AuthStackNavigator() {
+	const { t } = useTranslation()
+
 	return (
 		<AuthStack.Navigator initialRouteName="Login">
 			<AuthStack.Screen
@@ -29,9 +31,8 @@ export default function AuthStackNavigator() {
 				name="CheckProfile"
 				component={CheckProfileScreen}
 				options={{
-					header: (props) => (
-						<CustomHeader {...props} title={NAVIGATION.CHECK_PROFILE} hasBack />
-					)
+					header: CheckProfileHeader,
+					title: t('navigation.checkProfile')
 				}}
 			/>
 		</AuthStack.Navigator>

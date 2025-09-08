@@ -5,6 +5,10 @@
 		"paths": {
 			"@/*": ["src/*"]
 		},
-		"typeRoots": ["./src/types"]
+		"typeRoots": ["./src/types"],
+		"strict": true,
+		"strictNullChecks": true,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext"
 	}
 }

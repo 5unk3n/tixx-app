@@ -2,11 +2,17 @@ import {
 	APP_NAME,
 	CONSUMER_KEY,
 	CONSUMER_SECRET,
-	SERVICE_URL_SCHEME_IOS
+	SERVICE_URL_SCHEME_IOS,
+	GOOGLE_WEB_CLIENT_ID,
+	GOOGLE_IOS_CLIENT_ID
 } from '@env'
 import appleAuth, {
 	AppleRequestResponse
 } from '@invertase/react-native-apple-authentication'
+import {
+	GoogleSignin,
+	statusCodes
+} from '@react-native-google-signin/google-signin'
 import {
 	login as kakaoLogin,
 	getProfile as getKakaoProfile
@@ -15,12 +21,11 @@ import NaverLogin from '@react-native-seoul/naver-login'
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios'
 import React, { useEffect } from 'react'
-import { View } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import { StyleSheet, View } from 'react-native'
 import Toast from 'react-native-toast-message'
 
-import { ERRORS } from '@/constants/errors'
 import { APPLE_AUTH_KEY } from '@/constants/storeKey'
-import { UI } from '@/constants/ui'
 import { useAuth } from '@/hooks/useAuth'
 import { useCustomTheme } from '@/hooks/useCustomTheme'
 import { useSignUpStore } from '@/stores/signUpStore'
@@ -37,9 +42,10 @@ interface LoginButtonProps {
 }
 
 export default function LoginButton({ provider, ...props }: LoginButtonProps) {
+	const navigation = useNavigation()
+	const { t } = useTranslation()
 	const { setOAuthData } = useSignUpStore()
 	const { login, recentLoginProvider } = useAuth()
-	const navigation = useNavigation()
 	const { colors } = useCustomTheme()
 
 	useEffect(() => {
@@ -56,6 +62,13 @@ export default function LoginButton({ provider, ...props }: LoginButtonProps) {
 					'If this function executes, User Credentials have been Revoked'
 				)
 			})
+		} else if (provider === 'google') {
+			GoogleSignin.configure({
+				webClientId: GOOGLE_WEB_CLIENT_ID, // 필수: 웹 클라이언트 ID
+				iosClientId: GOOGLE_IOS_CLIENT_ID, // iOS용 (Firebase 미사용시)
+				offlineAccess: true, // 서버에서 사용자 정보 접근 필요시
+				scopes: ['profile', 'email'] // 필요한 권한 범위
+			})
 		}
 	}, [provider])
 
@@ -66,7 +79,10 @@ export default function LoginButton({ provider, ...props }: LoginButtonProps) {
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
 				if (error.response?.status === 400) {
-					Toast.show({ type: 'error', text1: ERRORS.AUTH.OTHER_SERVICE_USER })
+					Toast.show({
+						type: 'error',
+						text1: t('auth.errors.otherServiceUser')
+					})
 				} else if (error.response?.status === 404) {
 					const kakaoProfile = await getKakaoProfile()
 
@@ -82,7 +98,7 @@ export default function LoginButton({ provider, ...props }: LoginButtonProps) {
 
 					navigation.navigate('Agreement')
 				} else {
-					Toast.show({ type: 'error', text1: error.response?.data.message })
+					Toast.show({ type: 'error', text1: error.message })
 				}
 			}
 		}
@@ -100,7 +116,10 @@ export default function LoginButton({ provider, ...props }: LoginButtonProps) {
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
 				if (error.response?.status === 400) {
-					Toast.show({ type: 'error', text1: ERRORS.AUTH.OTHER_SERVICE_USER })
+					Toast.show({
+						type: 'error',
+						text1: t('auth.errors.otherServiceUser')
+					})
 				} else if (error.response?.status === 404 && accessToken) {
 					const { response: naverProfile } =
 						await NaverLogin.getProfile(accessToken)
@@ -117,7 +136,7 @@ export default function LoginButton({ provider, ...props }: LoginButtonProps) {
 
 					navigation.navigate('Agreement')
 				} else {
-					Toast.show({ type: 'error', text1: error.response?.data.message })
+					Toast.show({ type: 'error', text1: error.message })
 				}
 			}
 		}
@@ -161,7 +180,10 @@ export default function LoginButton({ provider, ...props }: LoginButtonProps) {
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
 				if (error.response?.status === 400) {
-					Toast.show({ type: 'error', text1: ERRORS.AUTH.OTHER_SERVICE_USER })
+					Toast.show({
+						type: 'error',
+						text1: t('auth.errors.otherServiceUser')
+					})
 				} else if (error.response?.status === 404 && response?.identityToken) {
 					const string = await secureStorage.get(APPLE_AUTH_KEY)
 
@@ -182,8 +204,70 @@ export default function LoginButton({ provider, ...props }: LoginButtonProps) {
 
 					navigation.navigate('Agreement')
 				} else {
-					Toast.show({ type: 'error', text1: error.response?.data.message })
+					Toast.show({ type: 'error', text1: error.message })
 				}
+			}
+		}
+	}
+
+	const loginWithGoogle = async () => {
+		try {
+			await GoogleSignin.hasPlayServices()
+			const userInfo = await GoogleSignin.signIn()
+			if (userInfo.type === 'success') {
+				const idToken = userInfo.data.idToken
+				await login({
+					idToken: idToken,
+					provider: 'google'
+				})
+			}
+		} catch (error: any) {
+			if (axios.isAxiosError(error)) {
+				if (error.response?.status === 400) {
+					Toast.show({
+						type: 'error',
+						text1: t('auth.errors.otherServiceUser')
+					})
+				} else if (error.response?.status === 404) {
+					const user = GoogleSignin.getCurrentUser()
+					if (user === null) {
+						Toast.show({
+							type: 'error',
+							text1: 'No user data found'
+						})
+						return
+					}
+
+					setOAuthData({
+						name: user.user.name || '',
+						email: user.user.email || '',
+						provider: 'google'
+					})
+
+					navigation.navigate('Agreement')
+				} else {
+					Toast.show({ type: 'error', text1: error.message })
+				}
+			} else if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+				// 사용자가 로그인을 취소한 경우
+				Toast.show({
+					type: 'error',
+					text1: 'Sign in cancelled'
+				})
+			} else if (error.code === statusCodes.IN_PROGRESS) {
+				// 로그인이 이미 진행 중인 경우
+				Toast.show({
+					type: 'error',
+					text1: 'Sign in is already in progress'
+				})
+			} else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+				// 구글 플레이 서비스를 사용할 수 없는 경우
+				Toast.show({
+					type: 'error',
+					text1: 'Play services are not available'
+				})
+			} else {
+				Toast.show({ type: 'error', text1: error.message })
 			}
 		}
 	}
@@ -199,6 +283,9 @@ export default function LoginButton({ provider, ...props }: LoginButtonProps) {
 			case 'apple':
 				loginWithApple()
 				break
+			case 'google':
+				loginWithGoogle()
+				break
 			default:
 				break
 		}
@@ -208,18 +295,22 @@ export default function LoginButton({ provider, ...props }: LoginButtonProps) {
 		return <CustomIcon name={iconName} className="mr-4" />
 	}
 
-	const styles = {
+	const stylesByProvider = {
 		kakao: {
 			backgroundColor: colors.brandColors.kakao,
-			color: colors.grayscale.b
+			color: colors.grayscale[900]
 		},
 		naver: {
 			backgroundColor: colors.brandColors.naver,
-			color: colors.grayscale.w
+			color: colors.grayscale[0]
 		},
 		apple: {
 			backgroundColor: colors.brandColors.apple,
-			color: colors.grayscale.b
+			color: colors.grayscale[900]
+		},
+		google: {
+			backgroundColor: colors.brandColors.google,
+			color: colors.grayscale[900]
 		}
 	}
 
@@ -228,13 +319,22 @@ export default function LoginButton({ provider, ...props }: LoginButtonProps) {
 			{provider === recentLoginProvider && <RecentLoginTooltip />}
 			<CustomButton
 				mode="contained"
-				style={{ backgroundColor: styles[provider].backgroundColor }}
-				labelStyle={{ color: styles[provider].color }}
+				style={[
+					styles.loginButtonContainer,
+					{ backgroundColor: stylesByProvider[provider].backgroundColor }
+				]}
+				labelStyle={{ color: stylesByProvider[provider].color }}
 				onPress={handleLogin}
 				icon={() => renderIcon(provider)}
 			>
-				{UI.AUTH[(provider.toUpperCase() + '_LOGIN') as keyof typeof UI.AUTH]}
+				{t(`auth.loginWith.${provider}`)}
 			</CustomButton>
 		</View>
 	)
 }
+
+const styles = StyleSheet.create({
+	loginButtonContainer: {
+		borderWidth: 0
+	}
+})

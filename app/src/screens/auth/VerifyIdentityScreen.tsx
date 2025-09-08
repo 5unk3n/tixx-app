@@ -14,9 +14,9 @@ export default function VerifyIdentityScreen({ route }: Props) {
 	const { mode } = route.params
 	const setAuthData = useSignUpStore((state) => state.setOAuthData)
 
-	const handleSubmit = (phone: string) => {
+	const handleSubmit = (phone: string, verified: number) => {
 		if (mode === 'signUp') {
-			setAuthData({ phone })
+			setAuthData({ phone, verified })
 			navigation.navigate('CheckProfile')
 			return
 		}

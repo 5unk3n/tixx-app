@@ -13,7 +13,12 @@ module.exports = {
 			'react-native-reanimated/plugin'
 		],
 		'nativewind/babel',
-		'module:react-native-dotenv',
+		[
+			'module:react-native-dotenv',
+			{
+				moduleName: '@env' // import { VAR } from '@env'
+			}
+		],
 		'react-native-reanimated/plugin'
 	],
 	env: {

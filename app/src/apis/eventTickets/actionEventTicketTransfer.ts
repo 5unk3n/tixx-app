@@ -2,6 +2,7 @@ import { API_PATH } from '@/constants/apis'
 import { EventTicketsActionPayload } from '@/types'
 import axiosInstance from '@/utils/axiosInstance'
 import { EventTicketsActionResponseSchema } from '@/utils/schemas'
+import { validateApiResponse } from '@/utils/validateApiResponse'
 
 export const actionEventTicketTransfer = async (
 	data: EventTicketsActionPayload,
@@ -14,5 +15,5 @@ export const actionEventTicketTransfer = async (
 	}
 
 	const response = await axiosInstance.post(actionMap[action], data)
-	return EventTicketsActionResponseSchema.parse(response.data)
+	return validateApiResponse(response.data, EventTicketsActionResponseSchema)
 }

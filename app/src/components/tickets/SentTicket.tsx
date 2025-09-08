@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { UI } from '@/constants/ui'
 import { EventTicketsUserTransfer } from '@/types'
 
 import TicketListItem from './TicketListItem'
@@ -12,18 +12,11 @@ interface SentTicketProps {
 
 export default function SentTicket({
 	transferredEventTicket,
+
 	...props
 }: SentTicketProps) {
+	const { t } = useTranslation()
 	const navigation = useNavigation()
-	// const { mutate: actionEventTicketTransfer } = useActionEventTicketTransfer()
-	// const [dialogProps, setDialogProps] = useState({
-	// 	visible: false,
-	// 	title: '',
-	// 	leftButtonText: '',
-	// 	rightButtonText: '',
-	// 	onLeftPress: () => {},
-	// 	onRightPress: () => {}
-	// })
 
 	return (
 		<TicketListItem
@@ -33,36 +26,22 @@ export default function SentTicket({
 			}
 			statusText={`${
 				transferredEventTicket.toUser
-					? `To. ${transferredEventTicket.toUser.nickname}님`
+					? t('tickets.to', {
+							nickname: transferredEventTicket.toUser.nickname
+						})
 					: ''
 			} ${
 				transferredEventTicket.status === 1
-					? UI.COMMON.WAITING
+					? t('common.status.waiting')
 					: transferredEventTicket.status === 2
-						? UI.COMMON.ACCEPTED
+						? t('common.status.accepted')
 						: transferredEventTicket.status === 3
-							? UI.COMMON.REJECT
-							: UI.COMMON.CANCEL
+							? t('common.status.rejected')
+							: t('tickets.status.canceled')
 			}`}
+			transferId={transferredEventTicket.id}
+			selectable={transferredEventTicket.status === 1}
 			{...props}
-		>
-			{/* TODO: 필요없으면 지우기 */}
-			{/* {type === 'sent' && transferredEventTicket.status === 1 && (
-				<CustomButton
-					onPress={() =>
-						actionEventTicketTransfer({
-							action: 'cancel',
-							data: { eventTicketTransferId: transferredEventTicket.id }
-						})
-					}
-					mode="contained"
-					labelVariant="body2Medium"
-					labelStyle={style.button}
-					className="mt-3"
-				>
-					취소
-				</CustomButton>
-			)} */}
-		</TicketListItem>
+		/>
 	)
 }

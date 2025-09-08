@@ -1,37 +1,77 @@
-import React from 'react'
-import { Linking, View } from 'react-native'
-import DeviceInfo from 'react-native-device-info'
+import { useNavigation } from '@react-navigation/native'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Linking, Pressable, View } from 'react-native'
+import { useStallionUpdate } from 'react-native-stallion'
 
-import { UI } from '@/constants/ui'
+import { useAppVersion } from '@/hooks/useAppVersion'
+import { useDeveloperMode } from '@/hooks/useDeveloperMode'
 
+import LogoutDialog from '../auth/LogoutDialog'
+import CustomIcon from '../ui/display/CustomIcon'
 import CustomListItem from '../ui/display/CustomListItem'
 import { CustomText } from '../ui/display/CustomText'
 
 export default function AppSettingsSection() {
-	const appVersion = DeviceInfo.getVersion()
+	const { t } = useTranslation()
+	const navigation = useNavigation()
+	const [isLogoutDialogVisible, setIsLogoutDialogVisible] = useState(false)
+	const { currentVersion, latestVersion } = useAppVersion(false)
+	const { handlePress, handleLongPress, isDevModeUnlocked } = useDeveloperMode()
+	const { currentlyRunningBundle } = useStallionUpdate()
 
 	return (
 		<View className="mt-6 mb-3">
-			<CustomText variant="body3Medium" className="mx-5 mb-3 text-grayscale-5">
-				{UI.COMMON.SETTINGS}
+			<CustomText
+				variant="body3Medium"
+				className="mx-5 mb-3 text-grayscale-400"
+			>
+				{t('common.settings.title')}
 			</CustomText>
 			<CustomListItem
-				title={UI.COMMON.APP_VERSION}
-				description={`${UI.COMMON.CURRENT_VERSION} : ${appVersion}`}
-				right={() => (
-					<CustomText variant="body3Regular" className="text-primary">
-						{/* TODO: 최신 버전 받아오기 추 */}
-						{UI.COMMON.LATEST_VERSION}
-					</CustomText>
-				)}
+				title={t('common.settings.appVersion')}
+				description={t('common.settings.currentVersion', {
+					version: isDevModeUnlocked
+						? `${currentVersion}.${currentlyRunningBundle?.version}`
+						: currentVersion
+				})}
+				rightElement={
+					<Pressable
+						onPress={handlePress}
+						onLongPress={handleLongPress}
+						delayLongPress={2000}
+					>
+						<CustomText variant="body3Regular">
+							{`${t('common.settings.latestVersion')} : ${latestVersion}`}
+						</CustomText>
+					</Pressable>
+				}
 			/>
 			<CustomListItem
-				title={UI.COMMON.TERMS_AND_POLICIES}
+				title={t('common.settings.terms')}
+				rightElement={<CustomIcon name="arrowRight" size={20} />}
 				onPress={() =>
 					Linking.openURL(
-						'https://steel-comfort-fff.notion.site/Tixx-130b7639f31a8052a822f86016b1b3aa?pvs=74'
+						'https://chemical-egg-b86.notion.site/Tixx-1d5af5a3ef1580b8b03fc6eb186892b9'
 					)
 				}
+			/>
+			<CustomListItem
+				title={t('common.settings.language')}
+				rightElement={<CustomIcon name="arrowRight" size={20} />}
+				onPress={() => navigation.navigate('Language')}
+			/>
+			<CustomListItem
+				title={t('auth.logout')}
+				onPress={() => setIsLogoutDialogVisible(true)}
+			/>
+			<CustomListItem
+				title={t('auth.accountDeletion')}
+				onPress={() => navigation.navigate('AccountDeletion')}
+			/>
+			<LogoutDialog
+				visible={isLogoutDialogVisible}
+				onDismiss={() => setIsLogoutDialogVisible(false)}
 			/>
 		</View>
 	)

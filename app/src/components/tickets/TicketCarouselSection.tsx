@@ -1,33 +1,88 @@
 import { useFocusEffect } from '@react-navigation/native'
-import { format } from 'date-fns'
-import React, { useCallback, useState } from 'react'
-import { Gesture, GestureDetector } from 'react-native-gesture-handler'
-import LinearGradient from 'react-native-linear-gradient'
-import Animated, {
-	runOnJS,
-	useAnimatedStyle,
-	useSharedValue,
-	withSpring,
-	withTiming
-} from 'react-native-reanimated'
+import React, { useCallback, useRef, useState } from 'react'
+import { LayoutChangeEvent, StyleSheet, View } from 'react-native'
+import { interpolate, useSharedValue } from 'react-native-reanimated'
+import Carousel, {
+	ICarouselInstance,
+	Pagination,
+	TAnimationStyle
+} from 'react-native-reanimated-carousel'
 
+import { TAB_BAR_HEIGHT, POSTER_RATIO } from '@/constants/dimensions'
 import { useEventTickets } from '@/hooks/queries/eventTickets/useEventTickets'
-import { useCustomTheme } from '@/hooks/useCustomTheme'
 
 import EmptyTickets from './EmptyTickets'
-import TicketCarousel from './TicketCarousel'
-import TicketSectionHeader from './TicketSectionHeader'
+import GroupedTicketCard from './GroupedTicketCard'
 
-const DURATION = 400
-const SWIPE_THRESHOLD = 200
-const SPRING_CONFIG = {
-	damping: 20,
-	stiffness: 200,
-	mass: 0.5
-}
+const TICKET_CONTENTS_HEIGHT = 133
+const TICKET_MARGIN = 20
+const PAGINATION_HEIGHT = 20
 
 export default function TicketCarouselSection() {
+	const [parentSize, setParentSize] = useState({ width: 0, height: 0 })
 	const { data: eventTickets, refetch } = useEventTickets(['available'])
+	const ref = useRef<ICarouselInstance>(null)
+	const progress = useSharedValue(0)
+	const isOverHeight =
+		(parentSize.width - TICKET_MARGIN * 2) / POSTER_RATIO +
+			TICKET_CONTENTS_HEIGHT >
+		parentSize.height - (TAB_BAR_HEIGHT + PAGINATION_HEIGHT)
+	const maxCardWidth = isOverHeight
+		? (parentSize.height -
+				(TAB_BAR_HEIGHT + PAGINATION_HEIGHT) -
+				TICKET_MARGIN -
+				36 -
+				TICKET_CONTENTS_HEIGHT) *
+			POSTER_RATIO
+		: parentSize.width - TICKET_MARGIN * 2
+	const cardHeight =
+		(maxCardWidth - TICKET_CONTENTS_HEIGHT) / POSTER_RATIO +
+		TICKET_CONTENTS_HEIGHT
+
+	// 부모 크기를 측정하는 함수
+	const handleLayout = (event: LayoutChangeEvent) => {
+		const { width, height } = event.nativeEvent.layout
+		setParentSize({ width, height })
+	}
+
+	const onPressPagination = (index: number) => {
+		ref.current?.scrollTo({
+			/**
+			 * Calculate the difference between the current index and the target index
+			 * to ensure that the carousel scrolls to the nearest index
+			 */
+			count: index - progress.value,
+			animated: true
+		})
+	}
+
+	const animationStyle: TAnimationStyle = React.useCallback(
+		(value: number, _index: number) => {
+			'worklet'
+			const zIndex = interpolate(value, [-1, 0, 1], [30, 20, 10])
+			const scale = interpolate(
+				value,
+				[-1, 0, 1, 2],
+				[1.05, 1, 0.95, 0.9],
+				'clamp'
+			)
+			const opacity = interpolate(value, [-0.75, 0, 1], [0, 1, 1])
+			const translateY = interpolate(
+				value,
+				[-1, 0, 1, 2],
+				[-200, 0, 12 + (cardHeight * 0.05) / 2, 24 + (cardHeight * 0.1) / 2],
+				'clamp'
+			)
+
+			return {
+				transform: [{ scale }, { translateY }],
+				zIndex,
+				opacity,
+				display: value <= -0.9 ? 'none' : 'block'
+			}
+		},
+		[cardHeight]
+	)
 
 	useFocusEffect(
 		useCallback(() => {
@@ -35,212 +90,63 @@ export default function TicketCarouselSection() {
 		}, [refetch])
 	)
 
-	const ticketSectionsMap = eventTickets.reduce((acc, ticket) => {
-		const date = new Date(ticket.startAt)
-		const formattedDate = format(date, 'yyyyMMdd')
-
-		if (!acc.has(formattedDate)) {
-			acc.set(formattedDate, [])
-		}
-
-		acc.get(formattedDate).push(ticket)
-
-		return acc
-	}, new Map())
-
-	const ticketSections = Array.from(ticketSectionsMap, ([date, tickets]) => ({
-		date,
-		tickets
-	})).sort((a, b) => Number(a.date) - Number(b.date))
-
-	const { colors } = useCustomTheme()
-	const [sectionHeight, setSectionHeight] = useState(1000)
-	const [currentSectionIndex, setCurrentSectionIndex] = useState(0)
-	const [currentCardIndex, setCurrentCardIndex] = useState(0)
-	const currentSection = ticketSections[currentSectionIndex]
-	const currentSectionLength = currentSection?.tickets.length
-	const currentSectionY = currentSectionIndex * -sectionHeight
-	const currentCardY = currentCardIndex * -SWIPE_THRESHOLD
-
-	const sectionTranslateY = useSharedValue(0)
-	const cardTranslateY = useSharedValue(0)
-
-	const moveToPrevSection = useCallback(() => {
-		if (currentSectionIndex > 0) {
-			const nextIndex = currentSectionIndex - 1
-
-			cardTranslateY.value = 0
-			sectionTranslateY.value = withTiming(
-				-nextIndex * sectionHeight,
-				{ duration: DURATION },
-				() => {
-					runOnJS(setCurrentSectionIndex)(nextIndex)
-					runOnJS(setCurrentCardIndex)(0)
-				}
-			)
-		} else {
-			sectionTranslateY.value = withTiming(currentSectionY, {
-				duration: DURATION
-			})
-		}
-	}, [
-		cardTranslateY,
-		currentSectionIndex,
-		currentSectionY,
-		sectionHeight,
-		sectionTranslateY
-	])
-
-	const moveToNextSection = useCallback(() => {
-		if (currentSectionIndex < ticketSections.length - 1) {
-			const nextIndex = currentSectionIndex + 1
-
-			cardTranslateY.value = 0
-			sectionTranslateY.value = withTiming(
-				-nextIndex * sectionHeight,
-				{ duration: DURATION },
-				() => {
-					runOnJS(setCurrentSectionIndex)(nextIndex)
-					runOnJS(setCurrentCardIndex)(0)
-				}
-			)
-		} else {
-			sectionTranslateY.value = withTiming(currentSectionY, {
-				duration: DURATION
-			})
-		}
-	}, [
-		cardTranslateY,
-		currentSectionIndex,
-		currentSectionY,
-		sectionHeight,
-		sectionTranslateY,
-		ticketSections.length
-	])
-
-	const moveToPrevCard = useCallback(
-		(velocity: number) => {
-			const targetValue = 200
-			cardTranslateY.value = withSpring(
-				currentCardIndex * -SWIPE_THRESHOLD + targetValue,
-				{
-					...SPRING_CONFIG,
-					velocity
-				},
-				() => {
-					runOnJS(setCurrentCardIndex)(currentCardIndex - 1)
-				}
-			)
-		},
-		[cardTranslateY, currentCardIndex]
-	)
-
-	const moveToNextCard = useCallback(
-		(velocity: number) => {
-			const targetValue = -200
-			cardTranslateY.value = withSpring(
-				currentCardIndex * -SWIPE_THRESHOLD + targetValue,
-				{
-					...SPRING_CONFIG,
-					velocity
-				},
-				() => {
-					runOnJS(setCurrentCardIndex)(currentCardIndex + 1)
-				}
-			)
-		},
-		[cardTranslateY, currentCardIndex]
-	)
-
-	const gesture = Gesture.Pan()
-		.onUpdate((event) => {
-			const { translationY } = event
-
-			if (
-				(currentCardIndex === 0 && translationY > 0) ||
-				(currentCardIndex === currentSectionLength - 1 && translationY < 0)
-			) {
-				sectionTranslateY.value = currentSectionY + translationY
-			} else {
-				cardTranslateY.value = Math.max(
-					Math.min(currentCardY + translationY, currentCardY + 200),
-					currentCardY - 200
-				)
-			}
-		})
-		.onEnd((event) => {
-			const { translationY, velocityY } = event
-
-			if (
-				Math.abs(translationY) > SWIPE_THRESHOLD ||
-				Math.abs(velocityY) > 500
-			) {
-				if (currentSectionY === sectionTranslateY.value) {
-					if (translationY > 0) {
-						runOnJS(moveToPrevCard)(velocityY)
-					} else {
-						runOnJS(moveToNextCard)(velocityY)
-					}
-				} else {
-					if (translationY > 0) {
-						runOnJS(moveToPrevSection)()
-					} else {
-						runOnJS(moveToNextSection)()
-					}
-				}
-			} else {
-				sectionTranslateY.value = withTiming(currentSectionY, {
-					duration: DURATION
-				})
-				cardTranslateY.value = withTiming(currentCardY, {
-					duration: DURATION
-				})
-			}
-		})
-
-	const sectionAnimatedStyle = useAnimatedStyle(() => {
-		return {
-			transform: [
-				{
-					translateY: sectionTranslateY.value
-				}
-			]
+	const dynamicStyles = StyleSheet.create({
+		groupedTicketCard: {
+			width: maxCardWidth,
+			marginTop: 20,
+			marginHorizontal: 'auto'
 		}
 	})
 
 	return (
-		<GestureDetector gesture={gesture}>
-			<Animated.View className="flex-1 px-5">
-				{ticketSections.length ? (
-					ticketSections.map(({ date, tickets }, sectionIndex) => {
+		<View className="flex-1" onLayout={handleLayout} testID="carousel-section">
+			{eventTickets.length && parentSize.height ? (
+				<Carousel
+					ref={ref}
+					loop={false}
+					width={parentSize.width}
+					height={parentSize.height - 80}
+					vertical={true}
+					onProgressChange={progress}
+					data={eventTickets}
+					renderItem={({ item }) => {
 						return (
-							<Animated.View
-								key={date}
-								className="pt-6 mb-3"
-								style={sectionAnimatedStyle}
-							>
-								<TicketSectionHeader date={date} eventTickets={tickets} />
-								<TicketCarousel
-									tickets={tickets}
-									cardStackY={cardTranslateY}
-									sectionIndex={sectionIndex}
-									currentSectionIndex={currentSectionIndex}
-									onLayout={(e) => {
-										setSectionHeight(e.nativeEvent.layout.height + 32 + 52) // 캐러셀 + 헤더 + 마진
-									}}
-								/>
-							</Animated.View>
+							<GroupedTicketCard
+								groupedTicket={item}
+								hasActions
+								style={dynamicStyles.groupedTicketCard}
+							/>
 						)
-					})
-				) : (
-					<EmptyTickets />
-				)}
-				<LinearGradient
-					colors={['#12121200', colors.background, colors.background]}
-					locations={[0, 0.63, 1]}
-					className="absolute bottom-0 left-0 right-0 h-32"
+					}}
+					style={styles.carousel}
+					customAnimation={animationStyle}
+					testID="carousel"
 				/>
-			</Animated.View>
-		</GestureDetector>
+			) : (
+				<EmptyTickets />
+			)}
+			<Pagination.Basic
+				progress={progress}
+				data={eventTickets}
+				dotStyle={styles.paginationDot}
+				activeDotStyle={styles.paginationActiveDot}
+				containerStyle={styles.paginationContainer}
+				onPress={onPressPagination}
+			/>
+		</View>
 	)
 }
+
+const styles = StyleSheet.create({
+	carousel: {
+		width: '100%'
+	},
+	paginationContainer: {
+		gap: 5,
+		marginBottom: 10,
+		height: 20,
+		alignItems: 'center'
+	},
+	paginationActiveDot: { backgroundColor: '#f1f1f1' },
+	paginationDot: { backgroundColor: '#262626', borderRadius: 100 }
+})

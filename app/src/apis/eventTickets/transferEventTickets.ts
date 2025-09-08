@@ -2,6 +2,7 @@ import { API_PATH } from '@/constants/apis'
 import { EventTicketsTransferPayload } from '@/types'
 import axiosInstance from '@/utils/axiosInstance'
 import { EventTicketsTransfersResponseSchema } from '@/utils/schemas'
+import { validateApiResponse } from '@/utils/validateApiResponse'
 
 export const transferEventTickets = async (
 	data: EventTicketsTransferPayload
@@ -10,5 +11,5 @@ export const transferEventTickets = async (
 		API_PATH.EVENT_TICKETS.TRANSFER,
 		data
 	)
-	return EventTicketsTransfersResponseSchema.parse(response.data)
+	return validateApiResponse(response.data, EventTicketsTransfersResponseSchema)
 }

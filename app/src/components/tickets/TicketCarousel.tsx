@@ -1,6 +1,5 @@
 import React from 'react'
 import { Dimensions, View } from 'react-native'
-import {} from 'react-native-gesture-handler'
 import Animated, {
 	interpolate,
 	SharedValue,
@@ -82,7 +81,7 @@ const AnimatedCard = ({ ticket, cardStackY, index }: AnimatedCardProps) => {
 	})
 
 	return (
-		<Animated.View className="absolute" style={[cardAnimatedStyle]}>
+		<Animated.View className="absolute w-full" style={[cardAnimatedStyle]}>
 			<GroupedTicketCard
 				key={ticket.id}
 				groupedTicket={ticket}

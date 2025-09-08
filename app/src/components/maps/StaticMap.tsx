@@ -1,12 +1,12 @@
 import { NCP_CLIENT_ID, NCP_CLIENT_SECRET } from '@env'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Image, useWindowDimensions } from 'react-native'
 
-import { getStaticMapUrl } from '@/apis/maps/getStaticMapUrl'
+import { getStaticMapUrl, StaticMapParams } from '@/apis/maps/getStaticMapUrl'
+import activeMarker from '@/assets/images/active-marker.png'
 
-import CustomIcon from '../ui/display/CustomIcon'
-
-interface StaticMapParams {
+interface StaticMapProps {
 	longitude: string
 	latitude: string
 	width?: number
@@ -18,16 +18,18 @@ export default function StaticMap({
 	latitude,
 	width,
 	height
-}: StaticMapParams) {
+}: StaticMapProps) {
+	const { i18n } = useTranslation()
 	const { width: screenWidth } = useWindowDimensions()
-	const mapWidth = width || screenWidth - 20 * 2
+	const mapWidth = width || screenWidth - 16 * 2
 	const mapHeight = height || 160
 
 	const mapParams = {
 		center: `${longitude} ${latitude}`,
-		w: mapWidth.toString(),
-		h: mapHeight.toString()
-	}
+		w: Math.floor(mapWidth).toString(),
+		h: Math.floor(mapHeight).toString(),
+		lang: i18n.language
+	} satisfies StaticMapParams
 
 	return (
 		<>
@@ -43,10 +45,8 @@ export default function StaticMap({
 				}}
 			/>
 			{/* HACK: 마커를 포함한 이미지는 외부에서 접속가능한 마커의 url이 필요해 임시로 절대 위치로 표시함*/}
-			<CustomIcon
-				name="marker"
-				width={32}
-				height={32}
+			<Image
+				source={activeMarker}
 				className="absolute top-1/2 left-1/2 transform -translate-x-4 -translate-y-8"
 			/>
 		</>

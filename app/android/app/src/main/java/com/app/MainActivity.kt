@@ -6,11 +6,17 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnable
 import com.facebook.react.defaults.DefaultReactActivityDelegate
 import android.os.Bundle;
 import org.devio.rn.splashscreen.SplashScreen; // here
+import android.content.Intent
 
 class MainActivity : ReactActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     SplashScreen.show(this);
     super.onCreate(null)
+  }
+
+  override fun onNewIntent(intent: Intent) {
+      super.onNewIntent(intent)
+      setIntent(intent)
   }
   
   /**

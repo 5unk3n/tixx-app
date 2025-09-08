@@ -1,29 +1,34 @@
 import { isAxiosError } from 'axios'
+import { format } from 'date-fns'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
-import {
-	getHash,
-	removeListener,
-	startOtpListener
-} from 'react-native-otp-verify'
+import { getHash, removeListener } from 'react-native-otp-verify'
 import Toast from 'react-native-toast-message'
 
 import { PhonAuthRequestInput } from '@/types'
-import { formatRemainingTime } from '@/utils/formatters'
 
+import { useRemainingTime } from './queries/useRemainingTime'
 import { useRequestPhoneAuthCode } from './queries/useRequestPhoneAuthCode'
 import { useVerifyPhoneAuthCode } from './queries/useVerifyPhoneAuthCode'
 
-// FIXME: useRemaining 사용
 export const usePhoneVerification = (
 	onAuthCodeReceived: (code: string) => void
 ) => {
+	const { t } = useTranslation()
 	const [expiredTime, setExpiredTime] = useState('')
-	const [remainingTime, setRemainingTime] = useState('')
+	const [isCodeSent, setIsCodeSent] = useState(false)
+	const firstRequestTimestamp = useRef<null | Date>(null)
+	const countRef = useRef(0)
 	const hashRef = useRef<string[]>([])
 
 	const { mutateAsync: requestPhoneAuthCode } = useRequestPhoneAuthCode()
 	const { mutateAsync: verifyPhoneAuthCode } = useVerifyPhoneAuthCode()
+	const { remainingTime } = useRemainingTime(
+		expiredTime || new Date().toString()
+	)
+	const formattedRemainingTime = format(remainingTime, 'mm:ss')
+	const isResendDisabled = remainingTime > 175 * 1000
 
 	useEffect(() => {
 		if (Platform.OS === 'android') {
@@ -33,49 +38,22 @@ export const usePhoneVerification = (
 				})
 				.catch(console.error)
 
-			startOtpListener((message) => {
-				const [_, extractedOtp] = /(\d{6})/g.exec(message) || []
-				if (extractedOtp) {
-					onAuthCodeReceived(extractedOtp)
-				}
-			})
-
 			return () => removeListener()
 		}
 	}, [onAuthCodeReceived])
 
-	const startCountdown = (
-		endAt: string,
-		updateCallback: (time: string) => void
-	) => {
-		const timer = setInterval(() => {
-			const remaining = formatRemainingTime(endAt)
-			updateCallback(remaining)
-
-			if (remaining === '00:00') {
-				clearInterval(timer)
-			}
-		}, 1000)
-		return timer
-	}
-
-	useEffect(() => {
-		if (expiredTime) {
-			const timer = startCountdown(expiredTime, setRemainingTime)
-			return () => clearInterval(timer)
-		}
-	}, [expiredTime])
-
-	const requestCode = async ({
-		carrier,
-		phone
-	}: Omit<PhonAuthRequestInput, 'hash'>) => {
+	const requestCode = async ({ phone }: Omit<PhonAuthRequestInput, 'hash'>) => {
 		try {
+			if (countRef.current === 0) {
+				firstRequestTimestamp.current = new Date()
+			}
+			countRef.current = countRef.current + 1
+
 			const { expiredAt } = await requestPhoneAuthCode({
-				carrier,
 				phone,
 				hash: hashRef.current[0]
 			})
+			setIsCodeSent(true)
 			setExpiredTime(expiredAt)
 			return true
 		} catch (error) {
@@ -83,10 +61,18 @@ export const usePhoneVerification = (
 				if (error.response?.status === 429) {
 					Toast.show({
 						type: 'error',
-						text1: '오늘 인증 시도 횟수를 초과했습니다. 내일 다시 시도해주세요.'
+						text1: t('auth.errors.tooManyAttempts')
+					})
+				} else if (
+					error.response?.status === 400 &&
+					error.response?.data.message?.includes('올바르지 않은 휴대폰 번호')
+				) {
+					Toast.show({
+						type: 'error',
+						text1: t('auth.errors.invalidPhoneNumber')
 					})
 				} else {
-					Toast.show({ type: 'error', text1: error.response?.data.message })
+					throw error
 				}
 			}
 			return false
@@ -101,23 +87,32 @@ export const usePhoneVerification = (
 			})
 
 			if (success) {
-				Toast.show({ type: 'success', text1: '인증되었습니다' })
+				Toast.show({ type: 'success', text1: t('auth.verifiedMessage') })
 				return true
 			}
 
+			console.error(errorMsg)
 			if (errorMsg === 'Phone auth code not found') {
-				Toast.show({ type: 'error', text1: '인증번호를 다시 확인해주세요' })
+				Toast.show({ type: 'error', text1: t('auth.errors.invalidCode') })
 			} else if (errorMsg === 'Phone auth code has expired') {
-				Toast.show({ type: 'error', text1: '인증번호가 만료되었습니다' })
+				Toast.show({ type: 'error', text1: t('auth.errors.expiredCode') })
 			} else if (errorMsg === 'Invalid phone auth code') {
-				Toast.show({ type: 'error', text1: '인증번호를 다시 확인해주세요' })
+				Toast.show({ type: 'error', text1: t('auth.errors.invalidCode') })
 			}
 			return false
 		} catch (error) {
-			Toast.show({ type: 'error', text1: '인증코드 검증에 실패했습니다' })
+			Toast.show({ type: 'error', text1: t('auth.errors.verificationFailed') })
 			return false
 		}
 	}
 
-	return { requestCode, verifyCode, remainingTime, isCodeSent: !!expiredTime }
+	return {
+		requestCode,
+		verifyCode,
+		remainingTime: formattedRemainingTime,
+		isCodeSent,
+		isResendDisabled,
+		firstReqTime: firstRequestTimestamp.current,
+		reqCount: countRef.current
+	}
 }

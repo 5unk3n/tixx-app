@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 
-import { checkNickname } from '@/apis/users/checkNickname'
+import { checkNickname } from '@/apis/auth/checkNickname'
 
 export const useCheckNickname = () => {
 	return useMutation({

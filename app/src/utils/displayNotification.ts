@@ -17,7 +17,8 @@ export const displayNotification = async (
 		body,
 		android: {
 			channelId,
-			importance: AndroidImportance.HIGH
+			importance: AndroidImportance.HIGH,
+			smallIcon: 'ic_stat_image'
 		},
 		ios: {
 			foregroundPresentationOptions: {

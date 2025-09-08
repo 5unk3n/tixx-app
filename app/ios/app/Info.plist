@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -35,23 +33,91 @@
 				<string>kakaod401d079ead93d39b0b4cae5ea93e1b6</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>tixx</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>tixx</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.98342760010-di02dhvk8s7ehk667rhuffmp8d6riqre</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>KAKAO_APP_KEY</key>
 	<string>d401d079ead93d39b0b4cae5ea93e1b6</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>kakaokompassauth</string>
-		<string>storykompassauth</string>
-		<string>kakaolink</string>
-		<string>naversearchapp</string>
+		<string>kftc-bankpay</string>
+		<string>ispmobile</string>
+		<string>hdcardappcardansimclick</string>
+		<string>smhyundaiansimclick</string>
+		<string>hyundaicardappcardid</string>
+		<string>shinhan-sr-ansimclick</string>
+		<string>shinhan-sr-ansimclick-naverpay</string>
+		<string>shinhan-sr-ansimclick-payco</string>
+		<string>shinhan-sr-ansimclick-lpay</string>
+		<string>shinhan-sr-ansimclick-mola</string>
+		<string>smshinhanansimclick</string>
+		<string>smailapp</string>
+		<string>kb-acp</string>
+		<string>kb-auth</string>
+		<string>kb-screen</string>
+		<string>kbbank</string>
+		<string>liivbank</string>
+		<string>newliiv</string>
+		<string>mpocket.online.ansimclick</string>
+		<string>ansimclickscard</string>
+		<string>ansimclickipcollect</string>
+		<string>vguardstart</string>
+		<string>samsungpay</string>
+		<string>scardcertiapp</string>
+		<string>monimopay</string>
+		<string>monimopayauth</string>
+		<string>lottesmartpay</string>
+		<string>lotteappcard</string>
+		<string>lmslpay</string>
+		<string>lpayapp</string>
+		<string>cloudpay</string>
+		<string>hanawalletmembers</string>
+		<string>nhappcardansimclick</string>
+		<string>nonghyupcardansimclick</string>
+		<string>nhallonepayansimclick</string>
+		<string>citispay</string>
+		<string>citicardappkr</string>
+		<string>citimobileapp</string>
+		<string>kakaotalk</string>
+		<string>payco</string>
+		<string>com.wooricard.wcard</string>
+		<string>newsmartpib</string>
+		<string>NewSmartPib</string>
+		<string>supertoss</string>
 		<string>naversearchthirdlogin</string>
+		<string>kakaobank</string>
+		<string>v3mobileplusweb</string>
+		<string>line</string>
+		<string>alipays</string>
+		<string>weixin</string>
+		<string>tauthlink</string>
+		<string>ktauthexternalcall</string>
+		<string>upluscorporation</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NMFClientId</key>
-	<string>b1sqszvk38</string>
+	<key>NMFNcpKeyId</key>
+	<string>gjn7dthwfw</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -61,8 +127,14 @@
 	</dict>
 	<key>NSContactsUsageDescription</key>
 	<string>선택한 연락처는 티켓 전송 기록과 함께 서버에 업로드됩니다. 동의하시겠습니까?</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>이 앱은 지도에서 내 위치를 표시하고, 주변 이벤트 및 베뉴 정보를 제공하기 위해 위치 정보 접근 권한이 필요합니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>현재 위치를 확인하기 위해 권한이 필요합니다.</string>
+	<string>이 앱은 지도에서 내 위치를 표시하고, 주변 이벤트 및 베뉴 정보를 제공하기 위해 위치 정보 접근 권한이 필요합니다.</string>
+	<key>StallionProjectId</key>
+	<string>688475c5c457eaa28ef26289</string>
+	<key>StallionAppToken</key>
+	<string>spb_sy70a0K0H5tkEwMdCA9gve7nMJh5o6wZ3jic_BYttD</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>MaterialCommunityIcons.ttf</string>

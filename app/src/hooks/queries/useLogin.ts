@@ -11,11 +11,13 @@ export const useLogin = () => {
 	return useMutation({
 		mutationFn: ({
 			provider,
-			accessToken
+			accessToken,
+			idToken
 		}: {
 			provider: OAuthProvider
-			accessToken: string
-		}) => loginWithOAuth(provider, accessToken),
+			accessToken?: string
+			idToken?: string
+		}) => loginWithOAuth(provider, accessToken, idToken),
 		onSuccess: async (data) => {
 			await login(data.jwt, data.user.provider)
 			queryClient.invalidateQueries({ queryKey: ['user'] })

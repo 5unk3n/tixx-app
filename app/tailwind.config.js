@@ -26,7 +26,10 @@ module.exports = {
 				tight: letterSpacings.tight * 16,
 				normal: letterSpacings.normal * 16
 			},
-			lineHeight: { ...lineHeights }
+			lineHeight: { ...lineHeights },
+			aspectRatio: {
+				poster: '4 / 5'
+			}
 		}
 	},
 	plugins: []

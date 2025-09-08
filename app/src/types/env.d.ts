@@ -7,4 +7,16 @@ declare module '@env' {
 	export const SERVICE_URL_SCHEME_IOS: string
 	export const NCP_CLIENT_ID: string
 	export const NCP_CLIENT_SECRET: string
+	export const GOOGLE_WEB_CLIENT_ID: string
+	export const GOOGLE_IOS_CLIENT_ID: string
+	export const PORTONE_STORE_ID: string
+	export const PORTONE_KPN_CHANNEL_KEY: string
+	export const PORTONE_KAKAO_CHANNEL_KEY: string
+	export const PORTONE_TOSS_CHANNEL_KEY: string
+	export const PORTONE_PAYPAL_CHANNEL_KEY: string
+	export const PORTONE_TEST_KPN_CHANNEL_KEY: string
+	export const PORTONE_TEST_KAKAO_CHANNEL_KEY: string
+	export const PORTONE_TEST_TOSS_CHANNEL_KEY: string
+	export const PORTONE_TEST_PAYPAL_CHANNEL_KEY: string
+	export const APPSFLYER_DEV_KEY: string
 }

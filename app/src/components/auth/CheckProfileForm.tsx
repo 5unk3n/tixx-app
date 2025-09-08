@@ -1,23 +1,21 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { format, parse } from 'date-fns'
-import React, { useState } from 'react'
+import React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { TouchableOpacity, View } from 'react-native'
-import DatePicker from 'react-native-date-picker'
+import { useTranslation } from 'react-i18next'
+import { View } from 'react-native'
 
-import { UI } from '@/constants/ui'
 import { useCheckNickname } from '@/hooks/queries/auth/useCheckNickname'
 import { useAuth } from '@/hooks/useAuth'
 import { useSignUpStore } from '@/stores/signUpStore'
 import { UserCheckProfileInput } from '@/types'
-import { formatDateWithPoint, formatPhone } from '@/utils/formatters'
+import { formatPhone } from '@/utils/formatters'
 import { UserSchema } from '@/utils/schemas'
 
 import CustomButton from '../ui/input/CustomButton'
 import CustomTextInput from '../ui/input/CustomTextInput'
 
 export default function CheckProfileForm() {
-	const [open, setOpen] = useState(false)
+	const { t } = useTranslation()
 	const user = useSignUpStore()
 	const { signUp } = useAuth()
 	const { mutateAsync: checkNickname } = useCheckNickname()
@@ -29,27 +27,28 @@ export default function CheckProfileForm() {
 		setError
 	} = useForm<UserCheckProfileInput>({
 		resolver: zodResolver(UserSchema.checkProfileInput),
-		defaultValues: { birth: user.birthYYYYMMDD || '20000101' }
+		defaultValues: { birth: user.birthYYYYMMDD }
 	})
 
 	const onSubmit: SubmitHandler<UserCheckProfileInput> = async ({
-		nickname,
-		birth
+		nickname
 	}) => {
 		const { success } = await checkNickname(nickname)
 		if (!success) {
-			setError('nickname', { message: '중복된 닉네임입니다.' })
+			setError('nickname', {
+				message: t('profile.errors.duplicatedNickname')
+			})
 			return
 		}
-
-		signUp({ ...user, birthYYYYMMDD: birth, nickname })
+		// TODO: 생년월일 활용 시 birth 추가
+		signUp({ ...user, nickname, birthYYYYMMDD: null })
 	}
 
 	return (
 		<View className="flex-1">
 			<View className="gap-9">
 				<CustomTextInput
-					label={UI.USERS.NAME}
+					label={t('profile.fields.name')}
 					disabled={true}
 					value={user.name}
 				/>
@@ -58,31 +57,45 @@ export default function CheckProfileForm() {
 					name="nickname"
 					render={({ field: { onChange, onBlur, value } }) => (
 						<CustomTextInput
-							label={UI.USERS.NICKNAME}
+							label={t('profile.fields.nickname')}
 							onBlur={onBlur}
 							onChangeText={onChange}
 							value={value}
 							errorMessage={errors.nickname?.message}
-							placeholder="닉네임을 입력해주세요"
+							placeholder={t('profile.placeholders.nickname')}
 							className="ml-9 mt-9"
 						/>
 					)}
 				/>
-				<Controller
+				{/* TODO: 생년월일 활용 시 다시 사용 */}
+				{/* <Controller
 					control={control}
 					name={'birth'}
 					render={({ field: { onChange, value } }) => (
 						<View className="mt-9 ml-9">
 							<TouchableOpacity onPress={() => setOpen(true)}>
 								<CustomTextInput
-									label={UI.USERS.BIRTH}
-									value={formatDateWithPoint(value)}
+									label={t('profile.fields.birth')}
+									value={value ? formatDateWithPoint(value) : ''}
 									editable={false}
 									pointerEvents="box-none"
 								/>
+								<TouchableOpacity
+									onPress={() => setValue('birth', null)}
+									className="z-20"
+								>
+									<CustomIcon
+										name={'close'}
+										className="absolute right-3 bottom-3"
+									/>
+								</TouchableOpacity>
 							</TouchableOpacity>
 							<DatePicker
-								date={parse(value, 'yyyyMMdd', new Date())}
+								date={
+									value && typeof value === 'string'
+										? parse(value, 'yyyyMMdd', new Date())
+										: new Date()
+								}
 								onConfirm={(date) => {
 									const formattedDate = format(date, 'yyyyMMdd')
 									setOpen(false)
@@ -93,38 +106,40 @@ export default function CheckProfileForm() {
 								}}
 								modal
 								open={open}
-								title="생년월일을 선택해주세요."
-								cancelText="취소"
-								confirmText="확인"
+								title={t('profile.selectBirth')}
+								cancelText={t('common.cancel')}
+								confirmText={t('common.confirm')}
 								mode="date"
-								locale="ko"
+								locale={i18n.language}
 							/>
 						</View>
 					)}
-				/>
+				/> */}
 				<CustomTextInput
-					label={UI.USERS.PHONE}
+					label={t('profile.fields.phone')}
 					disabled={true}
 					value={formatPhone(user.phone)}
 					right={
 						<CustomButton size="sm" mode="contained" disabled>
-							인증완료
+							{user.verified
+								? t('auth.verification.notComplete')
+								: t('auth.verification.complete')}
 						</CustomButton>
 					}
 				/>
 				<CustomTextInput
-					label={UI.USERS.EMAIL}
+					label={t('profile.fields.email')}
 					disabled={true}
 					value={user.email}
 				/>
 			</View>
 			<CustomButton
-				mode="contained"
 				className="mt-auto rounded-lg bottom-0"
 				onPress={handleSubmit(onSubmit)}
-				disabled={!watch('nickname') || !watch('birth')}
+				disabled={!watch('nickname')}
+				testID="submit-button"
 			>
-				{UI.COMMON.NEXT}
+				{t('common.actions.start')}
 			</CustomButton>
 		</View>
 	)

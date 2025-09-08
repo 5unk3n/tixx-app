@@ -1,10 +1,10 @@
 import React from 'react'
-import { View, Keyboard, ViewProps } from 'react-native'
+import { View, Keyboard, ViewProps, StyleSheet } from 'react-native'
 
 const DismissKeyboardView = ({ children, ...props }: ViewProps) => {
 	return (
 		<View
-			style={{ flex: 1 }}
+			style={styles.container}
 			{...props}
 			onStartShouldSetResponder={() => {
 				Keyboard.dismiss()
@@ -17,3 +17,9 @@ const DismissKeyboardView = ({ children, ...props }: ViewProps) => {
 }
 
 export default DismissKeyboardView
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1
+	}
+})

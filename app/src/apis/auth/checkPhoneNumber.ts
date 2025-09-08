@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { API_PATH } from '@/constants/apis'
 import axiosInstance from '@/utils/axiosInstance'
 import { UserSchema } from '@/utils/schemas'
+import { validateApiResponse } from '@/utils/validateApiResponse'
 
 export const checkPhoneNumber = async (phoneNumber: string) => {
 	const response = await axiosInstance.get(API_PATH.USER.BASE, {
@@ -11,6 +12,8 @@ export const checkPhoneNumber = async (phoneNumber: string) => {
 		}
 	})
 
-	// FIXME: 스키마 새로 만들기
-	return z.union([UserSchema.getResponse, z.string()]).parse(response.data)
+	return validateApiResponse(
+		response.data,
+		z.union([UserSchema.getResponse, z.string()])
+	)
 }

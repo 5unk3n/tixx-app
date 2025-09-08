@@ -1,0 +1,427 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ShadowGradient renders correctly for each type and matches snapshot 1`] = `
+<RNCSafeAreaProvider
+  onInsetsChange={[Function]}
+  style={
+    [
+      {
+        "flex": 1,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    collapsable={false}
+    pointerEvents="box-none"
+    style={
+      {
+        "flex": 1,
+      }
+    }
+  >
+    <BVLinearGradient
+      colors={
+        [
+          16777215,
+          219879962,
+          437983770,
+          857414170,
+          1293621786,
+          1713052186,
+          2149259802,
+        ]
+      }
+      endPoint={
+        {
+          "x": 0.5,
+          "y": 1,
+        }
+      }
+      locations={
+        [
+          0,
+          0.45,
+          0.56,
+          0.67,
+          0.78,
+          0.89,
+          1,
+        ]
+      }
+      startPoint={
+        {
+          "x": 0.5,
+          "y": 0,
+        }
+      }
+      style={
+        [
+          {
+            "position": "absolute",
+          },
+          {
+            "top": 0,
+          },
+          {
+            "left": 0,
+          },
+          {
+            "width": "100%",
+          },
+          {
+            "height": "100%",
+          },
+        ]
+      }
+    />
+  </View>
+</RNCSafeAreaProvider>
+`;
+
+exports[`ShadowGradient renders correctly for each type and matches snapshot 2`] = `
+<RNCSafeAreaProvider
+  onInsetsChange={[Function]}
+  style={
+    [
+      {
+        "flex": 1,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    collapsable={false}
+    pointerEvents="box-none"
+    style={
+      {
+        "flex": 1,
+      }
+    }
+  >
+    <BVLinearGradient
+      colors={
+        [
+          1713052186,
+          1293621786,
+          857414170,
+          437983770,
+          219879962,
+          219879962,
+          437983770,
+          639310362,
+          1075517978,
+          1293621786,
+          1713052186,
+          2149259802,
+          2568690202,
+        ]
+      }
+      endPoint={
+        {
+          "x": 0.5,
+          "y": 1,
+        }
+      }
+      locations={
+        [
+          0,
+          0.05,
+          0.11,
+          0.17,
+          0.23,
+          0.53,
+          0.59,
+          0.65,
+          0.7,
+          0.76,
+          0.81,
+          0.91,
+          1,
+        ]
+      }
+      startPoint={
+        {
+          "x": 0.5,
+          "y": 0,
+        }
+      }
+      style={
+        [
+          {
+            "position": "absolute",
+          },
+          {
+            "top": 0,
+          },
+          {
+            "left": 0,
+          },
+          {
+            "width": "100%",
+          },
+          {
+            "height": "100%",
+          },
+        ]
+      }
+    />
+  </View>
+</RNCSafeAreaProvider>
+`;
+
+exports[`ShadowGradient renders correctly for each type and matches snapshot 3`] = `
+<RNCSafeAreaProvider
+  onInsetsChange={[Function]}
+  style={
+    [
+      {
+        "flex": 1,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    collapsable={false}
+    pointerEvents="box-none"
+    style={
+      {
+        "flex": 1,
+      }
+    }
+  >
+    <BVLinearGradient
+      colors={
+        [
+          1713052186,
+          1293621786,
+          857414170,
+          437983770,
+          219879962,
+          219879962,
+          437983770,
+          857414170,
+          1293621786,
+          1713052186,
+        ]
+      }
+      endPoint={
+        {
+          "x": 0.5,
+          "y": 1,
+        }
+      }
+      locations={
+        [
+          0,
+          0.07,
+          0.11,
+          0.17,
+          0.23,
+          0.53,
+          0.64,
+          0.76,
+          0.87,
+          1,
+        ]
+      }
+      startPoint={
+        {
+          "x": 0.5,
+          "y": 0,
+        }
+      }
+      style={
+        [
+          {
+            "position": "absolute",
+          },
+          {
+            "top": 0,
+          },
+          {
+            "left": 0,
+          },
+          {
+            "width": "100%",
+          },
+          {
+            "height": "100%",
+          },
+        ]
+      }
+    />
+  </View>
+</RNCSafeAreaProvider>
+`;
+
+exports[`ShadowGradient renders correctly for each type and matches snapshot 4`] = `
+<RNCSafeAreaProvider
+  onInsetsChange={[Function]}
+  style={
+    [
+      {
+        "flex": 1,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    collapsable={false}
+    pointerEvents="box-none"
+    style={
+      {
+        "flex": 1,
+      }
+    }
+  >
+    <BVLinearGradient
+      colors={
+        [
+          1713052186,
+          1494948378,
+          1075517978,
+          437983770,
+          219879962,
+          219879962,
+          437983770,
+          1075517978,
+          1494948378,
+          1713052186,
+        ]
+      }
+      endPoint={
+        {
+          "x": 0.5,
+          "y": 1,
+        }
+      }
+      locations={
+        [
+          0,
+          0.06,
+          0.12,
+          0.18,
+          0.23,
+          0.77,
+          0.83,
+          0.9,
+          0.95,
+          1,
+        ]
+      }
+      startPoint={
+        {
+          "x": 0.5,
+          "y": 0,
+        }
+      }
+      style={
+        [
+          {
+            "position": "absolute",
+          },
+          {
+            "top": 0,
+          },
+          {
+            "left": 0,
+          },
+          {
+            "width": "100%",
+          },
+          {
+            "height": "100%",
+          },
+        ]
+      }
+    />
+  </View>
+</RNCSafeAreaProvider>
+`;
+
+exports[`ShadowGradient renders correctly for each type and matches snapshot 5`] = `
+<RNCSafeAreaProvider
+  onInsetsChange={[Function]}
+  style={
+    [
+      {
+        "flex": 1,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    collapsable={false}
+    pointerEvents="box-none"
+    style={
+      {
+        "flex": 1,
+      }
+    }
+  >
+    <BVLinearGradient
+      colors={
+        [
+          16777215,
+          437983770,
+          857414170,
+          1293621786,
+          1494948378,
+          2149259802,
+          2350586394,
+          2568690202,
+        ]
+      }
+      endPoint={
+        {
+          "x": 0.5,
+          "y": 1,
+        }
+      }
+      locations={
+        [
+          0,
+          0.3,
+          0.44,
+          0.58,
+          0.69,
+          0.8,
+          0.9,
+          1,
+        ]
+      }
+      startPoint={
+        {
+          "x": 0.5,
+          "y": 0,
+        }
+      }
+      style={
+        [
+          {
+            "position": "absolute",
+          },
+          {
+            "top": 0,
+          },
+          {
+            "left": 0,
+          },
+          {
+            "width": "100%",
+          },
+          {
+            "height": "100%",
+          },
+        ]
+      }
+    />
+  </View>
+</RNCSafeAreaProvider>
+`;

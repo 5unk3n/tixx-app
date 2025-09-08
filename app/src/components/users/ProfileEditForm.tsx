@@ -2,15 +2,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import Toast from 'react-native-toast-message'
 
-import { UI } from '@/constants/ui'
 import { useCheckNickname } from '@/hooks/queries/auth/useCheckNickname'
 import { useUpdateUser } from '@/hooks/queries/useUpdateUser'
 import { useUser } from '@/hooks/queries/useUser'
 import { UserUpdateInput } from '@/types'
-import { formatDateWithPoint, formatPhone } from '@/utils/formatters'
+import { formatPhone } from '@/utils/formatters'
 import { UserSchema } from '@/utils/schemas'
 
 import CustomIcon from '../ui/display/CustomIcon'
@@ -23,6 +23,7 @@ interface ProfileEditFormProps {
 }
 
 export default function ProfileEditForm({ isEditable }: ProfileEditFormProps) {
+	const { t } = useTranslation()
 	const navigation = useNavigation()
 	const { data: user, isError, isPending } = useUser()
 	const { mutateAsync: checkNickname } = useCheckNickname()
@@ -45,7 +46,9 @@ export default function ProfileEditForm({ isEditable }: ProfileEditFormProps) {
 			if (nickname !== user.nickname) {
 				const { success } = await checkNickname(nickname as string)
 				if (!success) {
-					setError('nickname', { message: '중복된 닉네임입니다.' })
+					setError('nickname', {
+						message: t('profile.errors.duplicatedNickname')
+					})
 					return
 				}
 			}
@@ -55,7 +58,7 @@ export default function ProfileEditForm({ isEditable }: ProfileEditFormProps) {
 		} catch (error) {
 			Toast.show({
 				type: 'error',
-				text1: '프로필 수정 실패'
+				text1: t('profile.errors.profileUpdateFailed')
 			})
 		}
 	}
@@ -70,13 +73,13 @@ export default function ProfileEditForm({ isEditable }: ProfileEditFormProps) {
 				<View className="ml-2 mb-9">
 					<CustomText
 						variant="caption1Regular"
-						className="pb-4 text-grayscale-4"
+						className="pb-4 text-grayscale-500"
 					>
-						{UI.USERS.CONNECT_SNS}
+						{t('profile.fields.snsConnect')}
 					</CustomText>
 					<View className="flex-row gap-4">
 						<View
-							className={`w-10 h-10 rounded-full ${user.provider === 'naver' ? 'bg-brandColors-naver' : 'bg-grayscale-2'}`}
+							className={`w-10 h-10 rounded-full ${user.provider === 'naver' ? 'bg-brandColors-naver' : 'bg-grayscale-700'}`}
 						>
 							<CustomIcon
 								name={user.provider === 'naver' ? 'naver' : 'naverGray'}
@@ -84,7 +87,15 @@ export default function ProfileEditForm({ isEditable }: ProfileEditFormProps) {
 							/>
 						</View>
 						<View
-							className={`w-10 h-10 rounded-full ${user.provider === 'kakao' ? 'bg-brandColors-kakao' : 'bg-grayscale-2'}`}
+							className={`w-10 h-10 rounded-full ${user.provider === 'google' ? 'bg-brandColors-google' : 'bg-grayscale-700'}`}
+						>
+							<CustomIcon
+								name={user.provider === 'google' ? 'google' : 'googleGray'}
+								className="flex-1 self-center"
+							/>
+						</View>
+						<View
+							className={`w-10 h-10 rounded-full ${user.provider === 'kakao' ? 'bg-brandColors-kakao' : 'bg-grayscale-700'}`}
 						>
 							<CustomIcon
 								name={user.provider === 'kakao' ? 'kakao' : 'kakaoGray'}
@@ -92,7 +103,7 @@ export default function ProfileEditForm({ isEditable }: ProfileEditFormProps) {
 							/>
 						</View>
 						<View
-							className={`w-10 h-10 rounded-full ${user.provider === 'apple' ? 'bg-brandColors-apple' : 'bg-grayscale-2'}`}
+							className={`w-10 h-10 rounded-full ${user.provider === 'apple' ? 'bg-brandColors-apple' : 'bg-grayscale-700'}`}
 						>
 							<CustomIcon
 								name={user.provider === 'apple' ? 'apple' : 'appleGray'}
@@ -103,7 +114,7 @@ export default function ProfileEditForm({ isEditable }: ProfileEditFormProps) {
 				</View>
 				<View className="flex-1 gap-9">
 					<CustomTextInput
-						label={UI.USERS.NAME}
+						label={t('profile.fields.name')}
 						disabled={true}
 						value={user.name}
 					/>
@@ -112,36 +123,38 @@ export default function ProfileEditForm({ isEditable }: ProfileEditFormProps) {
 						name="nickname"
 						render={({ field: { onChange, onBlur, value } }) => (
 							<CustomTextInput
-								label={UI.USERS.NICKNAME}
+								label={t('profile.fields.nickname')}
 								onBlur={onBlur}
 								onChangeText={onChange}
 								value={value}
 								errorMessage={errors.nickname?.message}
-								placeholder={UI.USERS.NICKNAME_PLACEHOLDER}
+								placeholder={t('profile.placeholders.nickname')}
 								className="ml-9 mt-9"
 								disabled={!isEditable}
 							/>
 						)}
 					/>
-					{/* FIXME: 생년월일 피커와 함께 수정 */}
-					<CustomTextInput
-						label={UI.USERS.BIRTH}
+					{/* TODO: 생년월일 활용 시 다시 사용 */}
+					{/* <CustomTextInput
+						label={t('profile.fields.birth')}
 						disabled={true}
-						value={formatDateWithPoint(user.birth)}
-					/>
+						value={user.birth ? formatDateWithPoint(user.birth) : '-'}
+					/> */}
 					<CustomTextInput
-						label={UI.USERS.PHONE}
+						label={t('profile.fields.phone')}
 						value={formatPhone(user.phone)}
 						disabled={true}
 						right={
 							<CustomButton size="sm" mode="contained" disabled>
-								{UI.AUTH.AUTHENTICATED}
+								{user.verified
+									? t('auth.verification.notComplete')
+									: t('auth.verification.complete')}
 							</CustomButton>
 						}
 						className="ml-9 mt-9"
 					/>
 					<CustomTextInput
-						label={UI.USERS.EMAIL}
+						label={t('profile.fields.email')}
 						disabled={true}
 						value={user.email}
 						className="mb-9"
@@ -156,7 +169,7 @@ export default function ProfileEditForm({ isEditable }: ProfileEditFormProps) {
 					}
 					onPress={handleSubmit(onSubmit)}
 				>
-					{UI.COMMON.CONFIRM}
+					{t('common.confirm')}
 				</CustomButton>
 			)}
 		</View>
