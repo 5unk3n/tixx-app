@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg2"
+   width="4000"
+   height="4000"
+   viewBox="0 0 4000 4000"
+   sodipodi:docname="TiXX 20LOGO_3.ai"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath16">
+      <path
+         d="M 0,3000 H 3000 V 0 H 0 Z"
+         id="path14" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="namedview4"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <g
+     id="g8"
+     inkscape:groupmode="layer"
+     inkscape:label="TiXX 20LOGO_3"
+     transform="matrix(1.3333333,0,0,-1.3333333,0,4000)">
+    <g
+       id="g10">
+      <g
+         id="g12"
+         clip-path="url(#clipPath16)">
+        <g
+           id="g18"
+           transform="translate(2726.6279,1598.432)">
+          <path
+             d="m 0,0 c -131.37,-113.173 -456.963,-202.49 -628.438,-241.616 -373.674,-85.264 -754.917,-114.51 -1137.685,-97.878 -165.912,7.21 -585.713,45.003 -706.562,159.14 -82.397,77.821 52.782,159.471 114.221,194.026 177.52,99.838 387.706,148.437 584.976,194.141 4.558,2.74 13.935,-2.524 13.935,-5.655 V -4.479 c 247.262,110.541 511.4,208.659 781.495,247.343 273.782,39.212 638.575,29.157 898.864,-69.999 C 8.873,139.316 104.07,89.655 0,0 m 176.469,215.364 c -16.91,215.657 -350.159,322.01 -525.715,361.739 -111.82,25.306 -225.794,40.238 -340.142,49.206 v 239.264 c -320.202,-19.662 -639.575,-96.385 -941.914,-200.03 -208.975,-71.639 -427.378,-162.523 -618.403,-273.4 -124.507,-72.267 -341.076,-213.028 -374.344,-360.852 0.104,-205.062 -19.071,-429.893 -5.764,-634.138 15.709,-241.091 401.364,-346.165 595.388,-383.422 505.38,-97.043 1162.763,-36.578 1646.292,138.926 185.18,67.214 546.88,231.698 564.602,457.71 -11.855,196.537 15.25,410.532 0,604.997"
+             style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path20" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
